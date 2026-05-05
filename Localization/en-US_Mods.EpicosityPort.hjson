@@ -1,0 +1,332 @@
+Tiles.MemeiteOreTile.MapEntry: Memeite Ore Tile
+
+Items: {
+	MemeiteBar: {
+		DisplayName: Memeite Bar
+		Tooltip: ""
+	}
+
+	MemeiteOre: {
+		DisplayName: Memeite Ore
+		Tooltip: ""
+	}
+
+	ComicallyLargeSpoon: {
+		DisplayName: Comically Large Spoon
+		Tooltip: "'Only a spoonful!'"
+	}
+
+	DiamondSwordSword: {
+		DisplayName: Diamond Sword Sword
+		Tooltip: "'I have a patent!'"
+	}
+
+	Flashlight: {
+		DisplayName: Flashlight
+		Tooltip: ""
+	}
+
+	HandMixer: {
+		DisplayName: Hand Mixer
+		Tooltip: ""
+	}
+
+	Leek: {
+		DisplayName: Leek
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilityCopper: {
+		DisplayName: Endurance Choreability Copper
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilityGold: {
+		DisplayName: Endurance Choreability Gold
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilityPlatinum: {
+		DisplayName: Endurance Choreability Platinum
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilitySilver: {
+		DisplayName: Endurance Choreability Silver
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilityTerra: {
+		DisplayName: Endurance Choreability Terra
+		Tooltip: ""
+	}
+
+	IronskinChoreabilityCopper: {
+		DisplayName: Ironskin Choreability Copper
+		Tooltip: ""
+	}
+
+	IronskinChoreabilityGold: {
+		DisplayName: Ironskin Choreability Gold
+		Tooltip: ""
+	}
+
+	IronskinChoreabilityPlatinum: {
+		DisplayName: Ironskin Choreability Platinum
+		Tooltip: ""
+	}
+
+	IronskinChoreabilitySilver: {
+		DisplayName: Ironskin Choreability Silver
+		Tooltip: ""
+	}
+
+	IronskinChoreabilityTerra: {
+		DisplayName: Ironskin Choreability Terra
+		Tooltip: ""
+	}
+
+	RageChoreabilityCopper: {
+		DisplayName: Rage Choreability Copper
+		Tooltip: ""
+	}
+
+	RageChoreabilityGold: {
+		DisplayName: Rage Choreability Gold
+		Tooltip: ""
+	}
+
+	RageChoreabilityPlatinum: {
+		DisplayName: Rage Choreability Platinum
+		Tooltip: ""
+	}
+
+	RageChoreabilitySilver: {
+		DisplayName: Rage Choreability Silver
+		Tooltip: ""
+	}
+
+	RageChoreabilityTerra: {
+		DisplayName: Rage Choreability Terra
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilityCopper: {
+		DisplayName: Swiftness Choreability Copper
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilityGold: {
+		DisplayName: Swiftness Choreability Gold
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilityPlatinum: {
+		DisplayName: Swiftness Choreability Platinum
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilitySilver: {
+		DisplayName: Swiftness Choreability Silver
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilityTerra: {
+		DisplayName: Swiftness Choreability Terra
+		Tooltip: ""
+	}
+
+	WrathChoreabilityCopper: {
+		DisplayName: Wrath Choreability Copper
+		Tooltip: ""
+	}
+
+	WrathChoreabilityGold: {
+		DisplayName: Wrath Choreability Gold
+		Tooltip: ""
+	}
+
+	WrathChoreabilityPlatinum: {
+		DisplayName: Wrath Choreability Platinum
+		Tooltip: ""
+	}
+
+	WrathChoreabilitySilver: {
+		DisplayName: Wrath Choreability Silver
+		Tooltip: ""
+	}
+
+	WrathChoreabilityTerra: {
+		DisplayName: Wrath Choreability Terra
+		Tooltip: ""
+	}
+
+	CopperDanceCredit: {
+		DisplayName: Copper Dance Credit
+		Tooltip: ""
+	}
+
+	GoldDanceCredit: {
+		DisplayName: Gold Dance Credit
+		Tooltip: ""
+	}
+
+	PlatinumDanceCredit: {
+		DisplayName: Platinum Dance Credit
+		Tooltip: ""
+	}
+
+	SilverDanceCredit: {
+		DisplayName: Silver Dance Credit
+		Tooltip: ""
+	}
+
+	TerraDanceCredit: {
+		DisplayName: Terra Dance Credit
+		Tooltip: ""
+	}
+
+	DanceMachineItem: {
+		DisplayName: Dance Machine Item
+		Tooltip: ""
+	}
+}
+
+Projectiles: {
+	DiamondSwordSwordProjectile.DisplayName: Diamond Sword Sword Projectile
+	SpinningLeek.DisplayName: Spinning Leek
+	Splinter.DisplayName: Splinter
+}
+
+Configs: {
+	EpicosityConfigClient: {
+		DisplayName: Epicosity Config Client
+
+		Headers: {
+			Mods: {
+				EpicosityPort: {
+					ConfigClient: {
+						RhythmistSettingsHeader: Mods. Epicosity Port. Config Client. Rhythmist Settings Header Header
+						MiscHeader: Mods. Epicosity Port. Config Client. Misc Header Header
+						DebugHeader: Mods. Epicosity Port. Config Client. Debug Header Header
+					}
+				}
+			}
+
+			RhythmistSettings: Rhythmist Settings Header
+			Miscellaneous: Miscellaneous Header
+			Debug: Debug Header
+		}
+
+		FKUpscroll: {
+			Label: 4K: Upscroll
+			Tooltip: ""
+		}
+
+		FKGHPlayfieldAbovePlayer: {
+			Label: 4K & GH: Playfield above player?
+			Tooltip: ""
+		}
+
+		FKGHTrackXOffset: {
+			Label: 4K & GH: Track X position offset
+			Tooltip: ""
+		}
+
+		FKGHTrackYOffset: {
+			Label: 4K & GH: Track Y position offset
+			Tooltip: ""
+		}
+
+		FKTrackHeight: {
+			Label: 4K: Track height
+			Tooltip: ""
+		}
+
+		DisableAntiMashingSystem: {
+			Label: 4K: Disable Anti-Mashing System
+			Tooltip: Penalties are only counted for way-off hits.
+		}
+
+		FKBeatmapOffset: {
+			Label: 4K: Beatmap gameplay offset
+			Tooltip: How late (+) or early (-) notes on a beatmap are actually positioned (in 1/60ths of a second)
+		}
+
+		FKVisualOffset: {
+			Label: 4K: Beatmap visual offset
+			Tooltip: How late (+) or early (-) notes on a beatmap are visually positioned (in 1/60ths of a second)
+		}
+
+		ScrollSpeed: {
+			Label: 4K: Scroll speed
+			Tooltip: How fast notes scroll!
+		}
+
+		ReduceNoteHitEffect: {
+			Label: 4K & GH: Reduce note hit animation
+			Tooltip: Minimize the animations for note hits if they're too distracting.
+		}
+
+		DisableHitSounds: {
+			Label: 4K & GH: Disable hit sounds
+			Tooltip: Disable hit sounds if they're too distracting.
+		}
+
+		DisableRhythmistSetup: {
+			Label: Disable first-time rhythmist setup
+			Tooltip: This is automatically enabled when finishing the rhythmist setup.
+		}
+
+		ReplaceCopyrightedMusic: {
+			Label: Replace Copyrighted Music
+			Tooltip: RS: This doesn't actually do anything
+		}
+
+		DisableDisclaimer: {
+			Label: Don't show unfinished disclaimer
+			Tooltip: This is automatically enabled when first closing the disclaimer.
+		}
+
+		GHSpeen: {
+			Label: Fun: Guitar Hero speen mode
+			Tooltip: ""
+		}
+
+		DisableModifiedDeathMessages: {
+			Label: Disable modified death messages
+			Tooltip: ""
+		}
+
+		DisableModifiedGameWindowTitles: {
+			Label: Disable modified game window titles
+			Tooltip: ""
+		}
+
+		TimingWindow: {
+			Label: Debug: Timing window for 4K and Guitar Hero weapons
+			Tooltip: ""
+		}
+
+		EasterEggChanceMult: {
+			Label: Debug: Death message easter egg chance multiplier
+			Tooltip: ""
+		}
+
+		ExperimentalPenaltyRange: {
+			Label: Debug: Mashing Penalty Range
+			Tooltip: Way off range (from an OK) where hits break the combo.
+		}
+	}
+}
+
+Keybinds: {
+	"Rhythm Button 1.DisplayName": Rhythm  Button 1
+	"Rhythm Button 2.DisplayName": Rhythm  Button 2
+	"Rhythm Button 3.DisplayName": Rhythm  Button 3
+	"Rhythm Button 4.DisplayName": Rhythm  Button 4
+	"Rhythm Switch Target (Left).DisplayName": Rhythm  Switch  Target ( Left)
+	"Rhythm Switch Target (Right).DisplayName": Rhythm  Switch  Target ( Right)
+	"Rhythm Strum.DisplayName": Rhythm  Strum
+	"Rhythm Strum (Secondary).DisplayName": Rhythm  Strum ( Secondary)
+}

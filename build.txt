@@ -1,0 +1,5 @@
+displayName = Epicosity
+author = 4mbr0s3 2
+version = 0.3.0
+sortAfter = TerrariaOverhaul, CalamityModMusic
+side = NoSync
