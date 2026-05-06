@@ -13,7 +13,6 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static EpicosityPort.Systems.Rhythm.ModPlayerRhythmist;
-using static EpicosityPort.Systems.Rhythm.RhythmMouse;
 namespace EpicosityPort.Systems.Rhythm;
 
 // RS: Dude what a GODCLASS

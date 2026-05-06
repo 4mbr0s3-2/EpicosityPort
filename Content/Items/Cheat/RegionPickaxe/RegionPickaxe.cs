@@ -9,9 +9,9 @@ using Terraria.GameContent.Achievements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
-using static Epicosity.Items.Cheat.RegionPickaxe;
+using static EpicosityPort.Content.Items.Cheat.RegionPickaxe.RegionPickaxe;
 
-namespace Epicosity.Items.Cheat
+namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 {
 	public class RegionPickaxe : SpecialItem
 	{
@@ -60,14 +60,14 @@ namespace Epicosity.Items.Cheat
 				#region Draw and process region pickaxe buttons
 				if (regionPickaxeUIPlayer.guiAnimationProgress > 0)
 				{
-					Texture2D shapeButtonTexture = ModContent.GetTexture("Epicosity/UI/RegionPickaxe/ShapeButton" + ((int)regionPickaxe.pickaxeShape + 1));
-					Texture2D bypassButtonTexture = ModContent.GetTexture("Epicosity/UI/RegionPickaxe/BypassButton" + ((int)regionPickaxe.pickaxeBypass + 1));
-					Texture2D filterButtonTexture = ModContent.GetTexture("Epicosity/UI/RegionPickaxe/FilterButton" + ((int)regionPickaxe.pickaxeFilter + 1));
-					Texture2D inversionButtonTexture = ModContent.GetTexture("Epicosity/UI/RegionPickaxe/InversionButton" + ((int)regionPickaxe.pickaxeSelectionInversion + 1));
-					string shapeString = EnumHelper.GetEnumValueNameAndSplitCamelCase<PickaxeShape>(regionPickaxe.pickaxeShape);
-					string bypassString = EnumHelper.GetEnumValueNameAndSplitCamelCase<PickaxeBypass>(regionPickaxe.pickaxeBypass);
-					string filterString = EnumHelper.GetEnumValueNameAndSplitCamelCase<PickaxeFilter>(regionPickaxe.pickaxeFilter);
-					string inversionString = EnumHelper.GetEnumValueNameAndSplitCamelCase<PickaxeSelectionInversion>(regionPickaxe.pickaxeSelectionInversion);
+					Texture2D shapeButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ShapeButton" + ((int)regionPickaxe.pickaxeShape + 1)).Value;
+					Texture2D bypassButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/BypassButton" + ((int)regionPickaxe.pickaxeBypass + 1)).Value;
+					Texture2D filterButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/FilterButton" + ((int)regionPickaxe.pickaxeFilter + 1)).Value;
+					Texture2D inversionButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InversionButton" + ((int)regionPickaxe.pickaxeSelectionInversion + 1)).Value;
+					string shapeString = EnumHelper.GetEnumValueNameAndSplitCamelCase(regionPickaxe.pickaxeShape);
+					string bypassString = EnumHelper.GetEnumValueNameAndSplitCamelCase(regionPickaxe.pickaxeBypass);
+					string filterString = EnumHelper.GetEnumValueNameAndSplitCamelCase(regionPickaxe.pickaxeFilter);
+					string inversionString = EnumHelper.GetEnumValueNameAndSplitCamelCase(regionPickaxe.pickaxeSelectionInversion);
 					float ease = Easings.EaseOutBack(regionPickaxeUIPlayer.guiAnimationProgress);
 					// Button index indicates the number of the current button
 					for (int buttonIndex = 0; buttonIndex < 4; buttonIndex++)
@@ -284,7 +284,7 @@ namespace Epicosity.Items.Cheat
 							{
 								spriteBatch.Draw
 								(
-									ModContent.Request<Texture2D>("Epicosity/Misc/WhitePixel"),
+									ModContent.Request<Texture2D>("EpicosityPort/Misc/WhitePixel").Value,
 									new Rectangle(x * 16 - (int)Main.screenPosition.X, y * 16 - (int)Main.screenPosition.Y, 16, 16),
 									new Rectangle(0, 0, 1, 1),
 									new Color(255, 255, 255, 20),
@@ -304,6 +304,9 @@ namespace Epicosity.Items.Cheat
 		public static bool ShouldDestroyTile(int x, int y, int minTileX, int minTileY, int maxTileX, int maxTileY, PickaxeShape pickaxeShape, PickaxeSelectionInversion pickaxeSelectionInversion)
 		{
 			bool returnValue = false;
+
+			// RS: Big if-elseif chain that Big Strategy and Deep State don't want you to see
+
 			if (pickaxeShape == PickaxeShape.Rectangle)
 			{
 				returnValue = true;
@@ -531,6 +534,7 @@ namespace Epicosity.Items.Cheat
 				{
 					if (guiAnimationProgress < 1)
 					{
+						// RS: No time. No deltaTime. We ball
 						guiAnimationProgress += 0.05f;
 					}
 
@@ -562,7 +566,7 @@ namespace Epicosity.Items.Cheat
 				// Activate destruction since the pickaxe is no longer channeling and both boundaries are defined
 				if (!Player.channel)
 				{
-					Main.NewText("Destroying region!");
+					//Main.NewText("Destroying region!");
 					
 					// Both are defined. Later, we'll make both null so the mining wouldn't trigger again
 

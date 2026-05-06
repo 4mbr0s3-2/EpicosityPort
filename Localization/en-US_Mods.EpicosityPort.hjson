@@ -190,12 +190,58 @@ Items: {
 		DisplayName: Dance Machine Item
 		Tooltip: ""
 	}
+
+	RegionPickaxe: {
+		DisplayName: Region Pickaxe
+		Tooltip: ""
+	}
+
+	BeeBeats: {
+		DisplayName: Bee Beats
+		Tooltip: ""
+	}
+
+	DeathlyHeroGuitar: {
+		DisplayName: Deathly Hero Guitar
+		Tooltip: ""
+	}
+
+	GoldDancePad: {
+		DisplayName: Gold Dance Pad
+		Tooltip: ""
+	}
+
+	PlatinumDancePad: {
+		DisplayName: Platinum Dance Pad
+		Tooltip: ""
+	}
+
+	StickyKeys: {
+		DisplayName: Sticky Keys
+		Tooltip: ""
+	}
+
+	VileHeroGuitar: {
+		DisplayName: Vile Hero Guitar
+		Tooltip: ""
+	}
+
+	WoodenDancePad: {
+		DisplayName: Wooden Dance Pad
+		Tooltip: ""
+	}
 }
 
 Projectiles: {
 	DiamondSwordSwordProjectile.DisplayName: Diamond Sword Sword Projectile
 	SpinningLeek.DisplayName: Spinning Leek
 	Splinter.DisplayName: Splinter
+	Crimcell.DisplayName: Crimcell
+	GoldPellet.DisplayName: Gold Pellet
+	PlatinumPellet.DisplayName: Platinum Pellet
+	StickySlimeBall.DisplayName: Sticky Slime Ball
+	Vilespike.DisplayName: Vilespike
+	WoodenPellet.DisplayName: Wooden Pellet
 }
 
 Configs: {
@@ -329,4 +375,31 @@ Keybinds: {
 	"Rhythm Switch Target (Right).DisplayName": Rhythm  Switch  Target ( Right)
 	"Rhythm Strum.DisplayName": Rhythm  Strum
 	"Rhythm Strum (Secondary).DisplayName": Rhythm  Strum ( Secondary)
+}
+
+Buffs: {
+	Despacito: {
+		DisplayName: Despacito
+		Description: Mods.EpicosityPort.Buffs.Despacito.Description
+	}
+
+	FreezingCold: {
+		DisplayName: Freezing Cold
+		Description: Mods.EpicosityPort.Buffs.FreezingCold.Description
+	}
+
+	StickySlimed: {
+		DisplayName: Sticky Slimed
+		Description: Mods.EpicosityPort.Buffs.StickySlimed.Description
+	}
+
+	BaldEagleBuff: {
+		DisplayName: Bald Eagle Buff
+		Description: Mods.EpicosityPort.Buffs.BaldEagleBuff.Description
+	}
+
+	KilleroombaBuff: {
+		DisplayName: Killeroomba Buff
+		Description: Mods.EpicosityPort.Buffs.KilleroombaBuff.Description
+	}
 }
