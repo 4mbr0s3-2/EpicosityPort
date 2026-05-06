@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace EpicosityPort.Systems.UserInterface.VanillaOverrides
 {
+    // RS: Read this if you're resistant to old Internet memes
+    // If Epicosity was made in 2025 you can imagine a 6-7 reference somewhere here
     public class MainMenuTitleMessages
     {
         public static string[] titleMessages = {
@@ -37,8 +39,11 @@ namespace EpicosityPort.Systems.UserInterface.VanillaOverrides
 			"Terraria: You seek the Holy Grail...",
             "Terraria: That's no ordinary rabbit...",
             "Terraria: 1... 2... 5!",
-            "Terraria: DC died for this...", // Dab Club
-			"Terraria: Also try Fortress Craft 3D!",
+
+            // RS: First rule of Dab Club: you do not talk about Dab Club
+            //"Terraria: DC died for this...", // Dab Club
+			
+            "Terraria: Also try Fortress Craft 3D!",
             "Terraria: Diggin' makes me feel good!",
             "Terraria: =3",
             "Terraria: Yeah boiiiiiiiiii!",
@@ -53,7 +58,7 @@ namespace EpicosityPort.Systems.UserInterface.VanillaOverrides
             "Terraria: [object Object]",
             "Terraria: Fun is infinite!",
 			//"Terrorism: Now with more explosive traps!",
-			"Teriariar: Help me im aheving a stroing eke",
+			//"Teriariar: Help me im aheving a stroing eke",
 			//"Terraria Otherworld: It's finally here!",
 			//"TERRAAAAAAAAAARIAAAAAAAAAAA: AAAAAAAAAAAAAAAAAAAAAAAA",
 			"2D Minecraft",
