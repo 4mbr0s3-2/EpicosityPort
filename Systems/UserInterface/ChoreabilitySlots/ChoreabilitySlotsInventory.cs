@@ -1,4 +1,4 @@
-﻿using EpicosityPort.Content.Items.Accessories.Choreabilities;
+﻿using EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities;
 using EpicosityPort.Systems.UserInterface;
 using EpicosityPort.Utilities;
 using Microsoft.Xna.Framework;

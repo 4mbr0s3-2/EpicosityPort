@@ -1,4 +1,4 @@
-﻿using EpicosityPort.Content.Items.Accessories.Choreabilities;
+﻿using EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities;
 using System;
 using Terraria;
 using Terraria.ModLoader;

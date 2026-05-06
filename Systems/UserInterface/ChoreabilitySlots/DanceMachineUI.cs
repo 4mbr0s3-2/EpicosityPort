@@ -1,4 +1,4 @@
-﻿using EpicosityPort.Content.Items.Accessories.Choreabilities;
+﻿using EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities;
 using EpicosityPort.Content.Items.Rhythm.DanceCredits;
 using EpicosityPort.Content.Items.Tiles.DanceMachine;
 using EpicosityPort.Systems.Rhythm;

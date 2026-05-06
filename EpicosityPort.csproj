@@ -8,7 +8,6 @@
 		
 	</PropertyGroup>
 	<ItemGroup>
-	  <Folder Include="Content\Items\Materials\" />
 	  <Folder Include="Content\Items\Fun\" />
 	  <Folder Include="Content\Items\Consumable\" />
 	  <Folder Include="Content\Items\Weapons\Ranged\" />

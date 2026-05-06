@@ -13,8 +13,8 @@ using EpicosityPort.Systems.Rhythm;
 using EpicosityPort;
 using EpicosityPort.Utilities;
 using EpicosityPort.Systems.UserInterface.ChoreabilitySlots;
-using EpicosityPort.Content.Items.Accessories.Choreabilities;
 using EpicosityPort.Effects.Shaders.Screen;
+using EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities;
 
 namespace EpicosityPort.Systems.UserInterface.Rhythm.ComboBar
 {
