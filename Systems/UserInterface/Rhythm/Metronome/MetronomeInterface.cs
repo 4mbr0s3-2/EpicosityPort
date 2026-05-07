@@ -58,6 +58,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 					return;
 				}
 				if (metronome?.GetType() == metronomeType) return;
+				metronome?.Dispose();
 				metronome = (MetronomeVisualBase)Activator.CreateInstance(metronomeType);
 			}
 			public override void Update(GameTime gameTime)

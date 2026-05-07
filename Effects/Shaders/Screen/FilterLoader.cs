@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 
@@ -44,8 +45,8 @@ namespace EpicosityPort.Effects.Shaders.Screen
 			//Filters.Scene[ShaderNames.ChocolateRainFilter] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.36862745098f, 0.09803921568f, 0.15294117647f).UseOpacity(0.33f), EffectPriority.Medium);
 
 			//// Shockwave effect by Kazzymodus https://forums.terraria.org/index.php?threads/tutorial-shockwave-effect-for-tmodloader.81685/
-			//Ref<Effect> shockwave = new Ref<Effect>(Epicosity.inst.GetEffect("Effects/Shaders/Screen/Shockwave"));
-			//Filters.Scene[ShaderNames.Shockwave] = new Filter(new ScreenShaderData(shockwave, "Shockwave"), EffectPriority.VeryHigh);
+			Asset<Effect> shockwave = EpicosityPort.Instance.Assets.Request<Effect>("Effects/Shaders/Screen/Shockwave");
+			Filters.Scene[ShaderNames.Shockwave] = new Filter(new ScreenShaderData(shockwave, "Shockwave"), EffectPriority.VeryHigh);
 
 			//// Metro City
 			//Filters.Scene[ShaderNames.MetroCitySky] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0, 0f, 0.18039215686f).UseOpacity(0.33f), EffectPriority.Medium);

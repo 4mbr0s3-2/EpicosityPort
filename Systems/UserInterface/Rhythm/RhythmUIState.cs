@@ -1,4 +1,5 @@
 ﻿using EpicosityPort.Systems.Rhythm;
+using EpicosityPort.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -62,6 +63,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 					text = "Epic";
 					break;
 			}
+			currentAcc?.Dispose();
 			currentAcc = new AccuracyDisplay(text, color);
 			judgementCounter?.Tally(accuracy);
 		}
@@ -73,22 +75,27 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 				time = 0
 			});
 		}
+		// RS: Man these RenderTargets aren't managed at all
+		// Let's uhhh try to fix that
 		public void PreRender(GameTime gameTime)
 		{
 			if (RhythmHandler.Instance.Interface.RhythmUserInterface.CurrentState == null) return;
 			if (gameplayNoteDisplayStyle == GameplayNoteDisplayStyle.GuitarHero)
 			{
-				guitarHeroRenderTarget = RenderGuitarHero(Main.spriteBatch);
-			}
+				//guitarHeroRenderTarget = RenderGuitarHero(Main.spriteBatch);
+                RenderGuitarHero(Main.spriteBatch, guitarHeroRenderTarget);
+            }
 			else if (gameplayNoteDisplayStyle == GameplayNoteDisplayStyle.FourKey)
 			{
-				fKRenderTarget = Render4K(Main.spriteBatch);
-			}
+				//fKRenderTarget = Render4K(Main.spriteBatch);
+                Render4K(Main.spriteBatch, fKRenderTarget);
+            }
 		}
 
-		public RenderTarget2D Render4K(SpriteBatch spriteBatch)
+		public void Render4K(SpriteBatch spriteBatch, RenderTarget2D renderTarget2D)
 		{
-			RenderTarget2D renderTarget2D = new RenderTarget2D(Main.graphics.GraphicsDevice, 300, 400);
+			//RenderTarget2D renderTarget2D = new RenderTarget2D(Main.graphics.GraphicsDevice, 300, 400);
+			renderTarget2D.GraphicsDevice.Clear(Color.Transparent);
 			RasterizerState rasterizerState = new RasterizerState
 			{
 				CullMode = CullMode.None
@@ -118,15 +125,16 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			EndDrawing:
 			spriteBatch.End();
 			Main.graphics.GraphicsDevice.SetRenderTarget(null);
-			return renderTarget2D;
+			//return renderTarget2D;
 		}
-		public RenderTarget2D RenderGuitarHero(SpriteBatch spriteBatch)
+		public void RenderGuitarHero(SpriteBatch spriteBatch, RenderTarget2D renderTarget2D)
 		{
+            renderTarget2D.GraphicsDevice.Clear(Color.Transparent);
 			List<VertexPosTexQuad> quads = new List<VertexPosTexQuad>();
-			#region Draw fretboard
-			ModPlayerRhythmistAccessories accessories = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmistAccessories>();
+            //RenderTarget2D renderTarget2D = new RenderTarget2D(Main.graphics.GraphicsDevice, 400, 400);
+            #region Draw fretboard
+            ModPlayerRhythmistAccessories accessories = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmistAccessories>();
 			ModPlayerRhythmist rhythmist = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmist>();
-			RenderTarget2D renderTarget2D = new RenderTarget2D(Main.graphics.GraphicsDevice, 400, 400);
 			RasterizerState rasterizerState = new RasterizerState
 			{
 				CullMode = CullMode.None
@@ -332,15 +340,25 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 				}
 			}
 			Main.graphics.GraphicsDevice.SetRenderTarget(null);
-			return renderTarget2D;
+			//return renderTarget2D;
 		}
 		public RhythmUIState()
 		{
 			Main.OnPreDraw += PreRender;
-		}
+
+            Main.RunOnMainThread(() =>
+				{
+					guitarHeroRenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 400, 400);
+					fKRenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 300, 400);
+				}
+			);
+        }
 		public void Dispose()
 		{
 			Main.OnPreDraw -= PreRender;
+
+			guitarHeroRenderTarget.Dispose();
+			fKRenderTarget.Dispose();
 		}
 
 		public override void OnInitialize()
@@ -365,7 +383,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 
 			receptors = new SpriteScene();
 			fireEffects = new List<GuitarHeroNoteFireEffect>();
-			fireEffects = new List<GuitarHeroNoteFireEffect>();
+			//fireEffects = new List<GuitarHeroNoteFireEffect>();
 
 			// RS: Wow! Asset preloading
 			// It's like I knew I was going to have to port to 1.4
@@ -377,14 +395,16 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			//GuitarHeroNoteTexture = ModContent.GetTexture("Epicosity/UI/Rhythm/NoteSkins/GuitarHero/Notes");
 			//GuitarHeroReceptorTexture = ModContent.GetTexture("Epicosity/UI/Rhythm/NoteSkins/GuitarHero/ControlNotes");
 			//GuitarHeroFireTexture = ModContent.GetTexture("Epicosity/UI/Rhythm/NoteSkins/GuitarHero/HitFlame");
-			// RS TODO: Depend on namespace
-			texPlayfieldArrow = ModContent.Request<Texture2D>($"EpicosityPort/Systems/UserInterface/Rhythm/NoteSkins/Note").Value;
-            ArrowOutlineTexture = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/ArrowOutline").Value;
-            CrosshairTexture = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/Crosshair").Value;
-            CenterTexture = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/Center").Value;
-            GuitarHeroNoteTexture = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/NoteSkins/GuitarHero/Notes").Value;
-            GuitarHeroReceptorTexture = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/NoteSkins/GuitarHero/ControlNotes").Value;
-            GuitarHeroFireTexture = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/NoteSkins/GuitarHero/HitFlame").Value;
+
+			// RS: JANK I KNOW
+			// But this mod was always jank in the first place
+			texPlayfieldArrow = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/Note", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            ArrowOutlineTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ArrowOutline", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            CrosshairTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Crosshair", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            CenterTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Center", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            GuitarHeroNoteTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/Notes", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            GuitarHeroReceptorTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/ControlNotes", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            GuitarHeroFireTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/HitFlame", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
             Instance.heldDown = new bool[]
 			{

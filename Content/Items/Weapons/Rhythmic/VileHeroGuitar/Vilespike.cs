@@ -10,7 +10,7 @@ namespace EpicosityPort.Content.Items.Weapons.Rhythmic.VileHeroGuitar
 {
 	public class Vilespike : RhythmicProjectile
 	{
-		public override string Texture => $"Terraria/Projectile_{ProjectileID.VilethornTip}";
+		public override string Texture => $"Terraria/Images/Projectile_{ProjectileID.VilethornTip}";
 		public float Trailing
 		{
 			get

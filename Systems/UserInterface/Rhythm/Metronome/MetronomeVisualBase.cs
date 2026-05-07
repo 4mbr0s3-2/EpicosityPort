@@ -4,7 +4,7 @@ using System;
 
 namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 {
-	public class MetronomeVisualBase
+	public abstract class MetronomeVisualBase : IDisposable
 	{
 		public virtual void Draw(SpriteBatch spriteBatch, bool idle, float crotchet, float positionInMeasure)
 		{
@@ -32,5 +32,6 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 		{
 
 		}
+		public abstract void Dispose();
 	}
 }

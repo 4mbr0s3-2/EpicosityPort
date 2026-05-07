@@ -230,6 +230,86 @@ Items: {
 		DisplayName: Wooden Dance Pad
 		Tooltip: ""
 	}
+
+	AccuracyTracker: {
+		DisplayName: Accuracy Tracker
+		Tooltip: ""
+	}
+
+	DefibrillatorPack: {
+		DisplayName: Defibrillator Pack
+		Tooltip: ""
+	}
+
+	FieryShoeTaps: {
+		DisplayName: Fiery Shoe Taps
+		Tooltip: ""
+	}
+
+	BorealWoodFretboard: {
+		DisplayName: Boreal Wood Fretboard
+		Tooltip: ""
+	}
+
+	EbonwoodFretboard: {
+		DisplayName: Ebonwood Fretboard
+		Tooltip: ""
+	}
+
+	PalmWoodFretboard: {
+		DisplayName: Palm Wood Fretboard
+		Tooltip: ""
+	}
+
+	RichMahoganyFretboard: {
+		DisplayName: Rich Mahogany Fretboard
+		Tooltip: ""
+	}
+
+	ShadewoodFretboard: {
+		DisplayName: Shadewood Fretboard
+		Tooltip: ""
+	}
+
+	WoodenFretboard: {
+		DisplayName: Wooden Fretboard
+		Tooltip: ""
+	}
+
+	MetallicShoeTaps: {
+		DisplayName: Metallic Shoe Taps
+		Tooltip: ""
+	}
+
+	WoodenMetronome: {
+		DisplayName: Wooden Metronome
+		Tooltip: ""
+	}
+
+	Pacemaker: {
+		DisplayName: Pacemaker
+		Tooltip: ""
+	}
+
+	RhythmistEmblem: {
+		DisplayName: Rhythmist Emblem
+		Tooltip: ""
+	}
+
+	TapCane: {
+		DisplayName: Tap Cane
+		Tooltip: ""
+	}
+
+	ChocolateWaterBucket: {
+		DisplayName: Chocolate Water Bucket
+		Tooltip: ""
+	}
+
+	FretWire: {
+		DisplayName: Fret Wire
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

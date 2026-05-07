@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
@@ -16,7 +17,8 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 		public WoodenMetronomeVisual()
 		{
 			woodenMetronome = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Wooden").Value;
-		}
+            pendulum = new RenderTarget2D(Main.instance.GraphicsDevice, 10, 50, false, SurfaceFormat.Color, DepthFormat.None);
+        }
 		public override void Beat(bool strong)
 		{
 			string s = strong ? "Strong" : "Weak";
@@ -36,7 +38,10 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 		//}
 		public override void PreDraw(SpriteBatch spriteBatch, GameTime obj, float crotchet, float positionInMeasure)
 		{
-			pendulum = new RenderTarget2D(Main.instance.GraphicsDevice, 10, 50, false, SurfaceFormat.Color, DepthFormat.None);
+			// RS: Uhhhh yeah no
+			// How did my PC even handle this back then
+			//pendulum = new RenderTarget2D(Main.instance.GraphicsDevice, 10, 50, false, SurfaceFormat.Color, DepthFormat.None);
+			
 			float bpm = 60f / crotchet;
 			bpm /= 20f;
 			Main.instance.GraphicsDevice.SetRenderTarget(pendulum);
@@ -110,5 +115,9 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 			Vector2 topLeft = new Vector2(Main.screenWidth - 38 - margin, Main.screenHeight - 58 - margin);
 			return new Rectangle((int)topLeft.X, (int)topLeft.Y, 38, 58).Contains(screenMouse.ToPoint());
 		}
-	}
+        public override void Dispose()
+        {
+            pendulum.Dispose();
+        }
+    }
 }

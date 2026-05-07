@@ -15,7 +15,7 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 {
 	public class RegionPickaxe : SpecialItem
 	{
-        public override string Texture => "Terraria/Item_3503";
+        public override string Texture => $"Terraria/Images/Item_{ItemID.TinPickaxe}";
 		public static RegionPickaxe GetLocalRegionPickaxe()
 		{
 			if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<RegionPickaxe>())

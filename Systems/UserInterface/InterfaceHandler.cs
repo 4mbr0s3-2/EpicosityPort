@@ -1,5 +1,6 @@
 ﻿using EpicosityPort.Systems.Rhythm;
 using EpicosityPort.Systems.UserInterface.ChoreabilitySlots;
+using EpicosityPort.Systems.UserInterface.Defibrillator;
 using EpicosityPort.Systems.UserInterface.Rhythm;
 using EpicosityPort.Systems.UserInterface.Rhythm.ComboBar;
 using EpicosityPort.Systems.UserInterface.Rhythm.Metronome;
@@ -123,7 +124,7 @@ namespace EpicosityPort.Systems.UserInterface
 
             //CutsceneManager.CutsceneInterface = CreateUserInterface("Cutscene", "Vanilla: Cursor");
 
-            //Defibrillator.DefibrillatorGame.GameInterface = CreateUserInterface("Defibrillator Game", "Vanilla: Death Text");
+            DefibrillatorGame.Instance.GameInterface = CreateUserInterface("Defibrillator Game", "Vanilla: Death Text");
 
             //RhythmBeatmapHandler.inst.BeatmapVisualInterface = CreateUserInterface("Beatmap Visuals", "Vanilla: Cursor");
 

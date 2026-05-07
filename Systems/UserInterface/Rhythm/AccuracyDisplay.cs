@@ -96,8 +96,13 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			}
 		}
 
+        // RS: I wish I was as carefree about (V)RAM as back in the day
+		// But 5 years later it's especially important to add these now
 		public void Dispose()
 		{
-		}
+            combo?.Dispose();
+			text?.Dispose();
+			shadow?.Dispose();
+        }
 	}
 }

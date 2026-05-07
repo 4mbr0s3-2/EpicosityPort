@@ -3,6 +3,7 @@ using EpicosityPort.Effects.Shaders.Screen;
 using EpicosityPort.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.Audio;
@@ -14,9 +15,18 @@ using Terraria.UI;
 
 namespace EpicosityPort.Systems.UserInterface.Defibrillator
 {
-	public class DefibrillatorGame
+	public class DefibrillatorGame : ModSystem
 	{
-		public static Terraria.UI.UserInterface GameInterface { get; internal set; }
+		public static DefibrillatorGame Instance {  get {  return ModContent.GetInstance<DefibrillatorGame>(); }  }
+		public Terraria.UI.UserInterface GameInterface { get; internal set; }
+		public Asset<Texture2D> YellowPulseTexture;
+        public Asset<Texture2D> GreenPulseTexture;
+
+        public override void Load()
+        {
+            YellowPulseTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/YellowPulseIndicator");
+            GreenPulseTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/GreenPulseIndicator");
+        }
 		public class GameUIStateInstance : UIState, IDisposable
 		{
 			RenderTarget2D defibrillatorRenderTarget;
@@ -35,13 +45,9 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 			int bpm = 130;
 			double timer = 0;
 			int[] pulseFrame = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-			Texture2D YellowPulseTexture;
-			Texture2D GreenPulseTexture;
 			public override void OnInitialize()
 			{
 				defibrillatorRenderTarget = new RenderTarget2D(Main.instance.GraphicsDevice, Main.screenWidth, Main.screenHeight, mipMap: false, Main.instance.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
-				YellowPulseTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/YellowPulseIndicator").Value;
-				GreenPulseTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/GreenPulseIndicator").Value;
 				foreach (NPC npc in Main.npc)
 				{
 					if (npc.boss && npc.active)
@@ -51,9 +57,14 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 					}
 				}
 			}
+
 			public void DrawDefibrillatorGame(SpriteBatch spriteBatch)
 			{
-				defibrillatorRenderTarget = new RenderTarget2D(Main.instance.GraphicsDevice, Main.screenWidth, Main.screenHeight, mipMap: false, Main.instance.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+				// RS: Y'know maybe it's NOT a good idea to do that
+				// The garbage collector won't be happy
+				// Instead we should just watch for window resizes
+				//defibrillatorRenderTarget = new RenderTarget2D(Main.instance.GraphicsDevice, Main.screenWidth, Main.screenHeight, mipMap: false, Main.instance.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+				
 				Main.instance.GraphicsDevice.SetRenderTarget(defibrillatorRenderTarget);
 				Main.instance.GraphicsDevice.Clear(Color.Transparent);
 				spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
@@ -66,7 +77,7 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 					{
 						Main.spriteBatch.Draw
 						(
-							GreenPulseTexture,
+							Instance.GreenPulseTexture.Value,
 							new Rectangle(defibrillatorScreenPosition.X + 58 * pulseIndex, defibrillatorScreenPosition.Y, 58, 58),
 							new Rectangle(0, 58 * (pulseFrame[pulseIndex] / 2), 58, 58),
 							Color.White
@@ -76,7 +87,7 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 					{
 						Main.spriteBatch.Draw
 						(
-							YellowPulseTexture,
+                            Instance.YellowPulseTexture.Value,
 							new Rectangle(defibrillatorScreenPosition.X + 58 * pulseIndex, defibrillatorScreenPosition.Y, 58, 58),
 							new Rectangle(0, 58 * (pulseFrame[pulseIndex] / 2), 58, 58),
 							Color.White
@@ -158,7 +169,7 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 				int heartSize = 16 + (int)(5 * pulseScalar) + (int)(5 * seventhPulseScalar) + (int)(15 * shockwaveAnimation);
 				spriteBatch.Draw
 				(
-					ModContent.Request<Texture2D>($"Terraria/Item_{ItemID.Heart}").Value,
+					ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Heart}").Value,
 					new Rectangle(defibrillatorScreenPosition.X + 406, defibrillatorScreenPosition.Y + 29, heartSize, heartSize),
 					null,
 					Color.White,
@@ -170,7 +181,15 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 				spriteBatch.End();
 				Main.instance.GraphicsDevice.SetRenderTarget(null);
 			}
-			public override void Draw(SpriteBatch spriteBatch)
+
+
+            public override void Recalculate()
+            {
+                defibrillatorRenderTarget?.Dispose();
+                defibrillatorRenderTarget = new RenderTarget2D(Main.instance.GraphicsDevice, Main.screenWidth, Main.screenHeight, mipMap: false, Main.instance.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+            }
+
+            public override void Draw(SpriteBatch spriteBatch)
 			{
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, null, null, null, Main.UIScaleMatrix);
@@ -180,7 +199,9 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 				}
 				spriteBatch.Draw(defibrillatorRenderTarget, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 				spriteBatch.End();
+
 				// For some reason this only works during drawing
+				// RS: I'm not even gonna question this
 				if (Main.mouseLeft && currentBeat >= 5 && currentBeat <= 7 && !lastPressedSpace && !hasHitForThisCycle)
 				{
 					hasHitForThisCycle = true;
@@ -213,9 +234,13 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 			}
 			public GameUIStateInstance()
 			{
+				// RS: I'm not sure why this was put here
+				// I think it has to do with the drawing possibly interfering with other SpriteBatch drawing?
+				// We love raw spritebatch calls
 				Main.OnPreDraw += PreRender;
 			}
-			public void PreRender(GameTime gameTime)
+
+            public void PreRender(GameTime gameTime)
 			{
 				// Put in update instead of initialize so width and height are always updated
 				DrawDefibrillatorGame(Main.spriteBatch);
@@ -316,7 +341,7 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 				if (Main.LocalPlayer.respawnTimer <= 0)
 				{
 					// Dispose
-					GameInterface.SetState(null);
+					Instance.GameInterface.SetState(null);
 					Filters.Scene[ShaderNames.Shockwave].Deactivate();
 					Dispose();
 				}
@@ -325,6 +350,7 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 			public void Dispose()
 			{
 				Main.OnPreDraw -= PreRender;
+				defibrillatorRenderTarget.Dispose();
 			}
 		}
 	}

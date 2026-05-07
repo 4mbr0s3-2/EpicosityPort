@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Epicosity.Items.Equipables.Accessories.Rhythmist
+namespace EpicosityPort.Content.Items.Accessories.Rhythmist.Pacemaker
 {
 	public class Pacemaker : ModItem
 	{

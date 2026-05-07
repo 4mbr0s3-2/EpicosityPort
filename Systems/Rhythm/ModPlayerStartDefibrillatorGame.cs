@@ -14,7 +14,7 @@ namespace EpicosityPort.Systems.Rhythm
 				ModPlayerRhythmistAccessories modPlayerRhythmistAccessories = Player.GetModPlayer<ModPlayerRhythmistAccessories>();
 				if (modPlayerRhythmistAccessories.hasDefibrillatorPack)
 				{
-					DefibrillatorGame.GameInterface.SetState(new DefibrillatorGame.GameUIStateInstance());
+					DefibrillatorGame.Instance.GameInterface.SetState(new DefibrillatorGame.GameUIStateInstance());
 				}
 			}
 		}

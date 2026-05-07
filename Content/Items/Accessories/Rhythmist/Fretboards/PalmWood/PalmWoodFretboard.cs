@@ -1,5 +1,4 @@
-﻿using Epicosity.Items.Equipables.Accessories.Rhythmist.Fretboards;
-using EpicosityPort.Content.Items.Materials.FretWire;
+﻿using EpicosityPort.Content.Items.Materials.FretWire;
 using EpicosityPort.Systems.Rhythm;
 using Terraria;
 using Terraria.ID;

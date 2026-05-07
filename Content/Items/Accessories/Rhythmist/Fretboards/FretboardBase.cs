@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Epicosity.Items.Equipables.Accessories.Rhythmist.Fretboards
+namespace EpicosityPort.Content.Items.Accessories.Rhythmist.Fretboards
 {
 	public abstract class FretboardBase : ModItem
 	{
