@@ -8,7 +8,10 @@ namespace EpicosityPort.Systems.UserInterface.AlphaMessage
 {
 	public class AlphaMessage
 	{
-		public static bool dontShowAgainConfig = false;
+		public static bool dontShowAgainConfig { 
+			get { return EpicosityConfigClient.Instance.DisableDisclaimer; }
+			set { EpicosityConfigClient.Instance.DisableDisclaimer = value; }
+		}
 		public static bool hasSeenThisSession = false;
 		public static Terraria.UI.UserInterface AlphaMessageInterface;
 		public class AlphaMessageUI : UIState

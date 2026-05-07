@@ -19,7 +19,17 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Setup
 				return ModContent.GetInstance<RhythmistSetup>();
 			}
 		}
-		public bool dontShowAgainConfig = false;
+		public bool dontShowAgainConfig { 
+			get 
+			{ 
+				return EpicosityConfigClient.Instance.DisableRhythmistSetup;
+			}
+			set
+			{
+				EpicosityConfigClient.Instance.DisableRhythmistSetup = value;
+
+            }
+		}
 		public bool hasSeenThisSession = false;
 		public Terraria.UI.UserInterface RhythmistSetupInterface;
 		public class UIRhythmistSetup : UIState
@@ -59,7 +69,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Setup
 				};
 				foreach (string name in imageNames)
 				{
-					textures.Add(name, ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/{name}").Value);
+					textures.Add(name, ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/{name}", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 				}
 			}
 			public override void Draw(SpriteBatch spriteBatch)
@@ -134,12 +144,12 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Setup
 						try
 						{
 							Dictionary<string, List<string>> keyStatus = PlayerInput.CurrentProfile.InputModes[InputMode.Keyboard].KeyStatus;
-							var leftKey = keyStatus[$"{typeof(EpicosityPort).Name}: Rhythm Button 1"];
-							var downKey = keyStatus[$"{typeof(EpicosityPort).Name}: Rhythm Button 2"];
-							var upKey = keyStatus[$"{typeof(EpicosityPort).Name}: Rhythm Button 3"];
-							var rightKey = keyStatus[$"{typeof(EpicosityPort).Name}: Rhythm Button 4"];
-							var switchKey = keyStatus[$"{typeof(EpicosityPort).Name}: Rhythm Switch Target (Left)"];
-							var switchKey2 = keyStatus[$"{typeof(EpicosityPort).Name}: Rhythm Switch Target (Right)"];
+							var leftKey = keyStatus[$"{typeof(EpicosityPort).Name}/Rhythm Button 1"];
+							var downKey = keyStatus[$"{typeof(EpicosityPort).Name}/Rhythm Button 2"];
+							var upKey = keyStatus[$"{typeof(EpicosityPort).Name}/Rhythm Button 3"];
+							var rightKey = keyStatus[$"{typeof(EpicosityPort).Name}/Rhythm Button 4"];
+							var switchKey = keyStatus[$"{typeof(EpicosityPort).Name}/Rhythm Switch Target (Left)"];
+							var switchKey2 = keyStatus[$"{typeof(EpicosityPort).Name}/Rhythm Switch Target (Right)"];
 							switch (controlsChoice)
 							{
 								case ControlsChoice.ArrowKeys:

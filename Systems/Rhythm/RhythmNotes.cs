@@ -10,14 +10,31 @@ namespace EpicosityPort.Systems.Rhythm
     //public partial class RhythmHandler
     public class RhythmNotes : ModSystem
     {
-        public static RhythmNotes Instance { get { 
-            return ModContent.GetInstance<RhythmNotes>();
-        } }
+        public static RhythmNotes Instance { get {
+                return ModContent.GetInstance<RhythmNotes>();
+            } }
         /// <summary>
         /// Used for arrow-based gameplay.
         /// </summary>
-        public bool notesUpscroll = false;
-        public bool playfieldAbovePlayer = false;
+        public bool notesUpscroll {
+            get {
+                return EpicosityConfigClient.Instance.FKUpscroll;
+            } 
+            set {
+                EpicosityConfigClient.Instance.FKUpscroll = value;
+            } 
+        }
+        public bool playfieldAbovePlayer
+        {
+            get
+            {
+                return EpicosityConfigClient.Instance.FKGHPlayfieldAbovePlayer;
+            }
+            set
+            {
+                EpicosityConfigClient.Instance.FKGHPlayfieldAbovePlayer = value;
+            }
+        }
         [Obsolete]
         public enum FourKeyTrackPattern
         {

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using EpicosityPort.Systems.Rhythm;
+using EpicosityPort.Systems.UserInterface.AlphaMessage;
+using EpicosityPort.Systems.UserInterface.Rhythm.Setup;
+using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
 namespace EpicosityPort
@@ -108,10 +111,11 @@ namespace EpicosityPort
         public int ExperimentalPenaltyRange;
         public override void OnChanged()
         {
-            //RhythmHandler.notesUpscroll = FKUpscroll;
-            //RhythmHandler.playfieldAbovePlayer = FKGHPlayfieldAbovePlayer;
+            // RS: Now these directly reference this config
+            //RhythmNotes.Instance.notesUpscroll = FKUpscroll;
+            //RhythmNotes.Instance.playfieldAbovePlayer = FKGHPlayfieldAbovePlayer;
             //AlphaMessage.dontShowAgainConfig = DisableDisclaimer;
-            //RhythmistSetup.dontShowAgainConfig = DisableRhythmistSetup;
+            //RhythmistSetup.Instance.dontShowAgainConfig = DisableRhythmistSetup;
         }
         public void Save()
         {

@@ -1,4 +1,5 @@
 Tiles.MemeiteOreTile.MapEntry: Memeite Ore Tile
+DeathMessages.RhythmMiss: "{0} did not feel the rhythm."
 
 Items: {
 	MemeiteBar: {

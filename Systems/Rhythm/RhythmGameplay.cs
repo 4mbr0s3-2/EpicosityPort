@@ -11,6 +11,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static EpicosityPort.Systems.Rhythm.ModPlayerRhythmist;
 namespace EpicosityPort.Systems.Rhythm;
@@ -802,8 +803,16 @@ public class RhythmHandler : ModSystem
 			{
 				SoundEngine.PlaySound(SoundID.Item16);
 				Player player = dancePlayer.Player;
-				// RS TODO
-				//player.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason($"{player.name} did not feel the rhythm."), damage, 0, default, default, default, 2);
+				player.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason(NetworkText.FromKey($"Mods.{EpicosityPort.Instance.Name}.DeathMessages.RhythmMiss", [player.name])),
+					damage,
+					0,
+					default,
+					default,
+					default,
+					false,
+					default,
+					default,
+					2);
 			}
 		}
 	}
