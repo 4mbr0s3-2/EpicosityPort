@@ -1,6 +1,6 @@
 ﻿using Terraria.Audio;
 
-namespace EpicosityPort.Utilities
+namespace EpicosityPort.Systems.Utilities
 {
     internal static class NamespaceToPathExtensions
     {

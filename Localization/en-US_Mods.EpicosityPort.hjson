@@ -37,131 +37,6 @@ Items: {
 		Tooltip: ""
 	}
 
-	EnduranceChoreabilityCopper: {
-		DisplayName: Endurance Choreability Copper
-		Tooltip: ""
-	}
-
-	EnduranceChoreabilityGold: {
-		DisplayName: Endurance Choreability Gold
-		Tooltip: ""
-	}
-
-	EnduranceChoreabilityPlatinum: {
-		DisplayName: Endurance Choreability Platinum
-		Tooltip: ""
-	}
-
-	EnduranceChoreabilitySilver: {
-		DisplayName: Endurance Choreability Silver
-		Tooltip: ""
-	}
-
-	EnduranceChoreabilityTerra: {
-		DisplayName: Endurance Choreability Terra
-		Tooltip: ""
-	}
-
-	IronskinChoreabilityCopper: {
-		DisplayName: Ironskin Choreability Copper
-		Tooltip: ""
-	}
-
-	IronskinChoreabilityGold: {
-		DisplayName: Ironskin Choreability Gold
-		Tooltip: ""
-	}
-
-	IronskinChoreabilityPlatinum: {
-		DisplayName: Ironskin Choreability Platinum
-		Tooltip: ""
-	}
-
-	IronskinChoreabilitySilver: {
-		DisplayName: Ironskin Choreability Silver
-		Tooltip: ""
-	}
-
-	IronskinChoreabilityTerra: {
-		DisplayName: Ironskin Choreability Terra
-		Tooltip: ""
-	}
-
-	RageChoreabilityCopper: {
-		DisplayName: Rage Choreability Copper
-		Tooltip: ""
-	}
-
-	RageChoreabilityGold: {
-		DisplayName: Rage Choreability Gold
-		Tooltip: ""
-	}
-
-	RageChoreabilityPlatinum: {
-		DisplayName: Rage Choreability Platinum
-		Tooltip: ""
-	}
-
-	RageChoreabilitySilver: {
-		DisplayName: Rage Choreability Silver
-		Tooltip: ""
-	}
-
-	RageChoreabilityTerra: {
-		DisplayName: Rage Choreability Terra
-		Tooltip: ""
-	}
-
-	SwiftnessChoreabilityCopper: {
-		DisplayName: Swiftness Choreability Copper
-		Tooltip: ""
-	}
-
-	SwiftnessChoreabilityGold: {
-		DisplayName: Swiftness Choreability Gold
-		Tooltip: ""
-	}
-
-	SwiftnessChoreabilityPlatinum: {
-		DisplayName: Swiftness Choreability Platinum
-		Tooltip: ""
-	}
-
-	SwiftnessChoreabilitySilver: {
-		DisplayName: Swiftness Choreability Silver
-		Tooltip: ""
-	}
-
-	SwiftnessChoreabilityTerra: {
-		DisplayName: Swiftness Choreability Terra
-		Tooltip: ""
-	}
-
-	WrathChoreabilityCopper: {
-		DisplayName: Wrath Choreability Copper
-		Tooltip: ""
-	}
-
-	WrathChoreabilityGold: {
-		DisplayName: Wrath Choreability Gold
-		Tooltip: ""
-	}
-
-	WrathChoreabilityPlatinum: {
-		DisplayName: Wrath Choreability Platinum
-		Tooltip: ""
-	}
-
-	WrathChoreabilitySilver: {
-		DisplayName: Wrath Choreability Silver
-		Tooltip: ""
-	}
-
-	WrathChoreabilityTerra: {
-		DisplayName: Wrath Choreability Terra
-		Tooltip: ""
-	}
-
 	CopperDanceCredit: {
 		DisplayName: Copper Dance Credit
 		Tooltip: ""
@@ -194,7 +69,11 @@ Items: {
 
 	RegionPickaxe: {
 		DisplayName: Region Pickaxe
-		Tooltip: ""
+		Tooltip:
+			'''
+			'New and improved!'
+			Click and drag to mine blocks
+			'''
 	}
 
 	BeeBeats: {
@@ -238,38 +117,67 @@ Items: {
 	}
 
 	DefibrillatorPack: {
-		DisplayName: Defibrillator Pack
-		Tooltip: ""
+		DisplayName: Rhythm Defibrillator
+		Tooltip:
+			'''
+			Allows for a faster respawn on death
+			Press space on the 7th beat
+			'''
 	}
 
 	FieryShoeTaps: {
 		DisplayName: Fiery Shoe Taps
-		Tooltip: ""
+		Tooltip:
+			'''
+			5% increased rhythmic damage
+			Rhythmic projectiles are on fire
+			'''
 	}
 
 	BorealWoodFretboard: {
 		DisplayName: Boreal Wood Fretboard
-		Tooltip: ""
+		Tooltip:
+			'''
+			10% decreased track speed
+			10% decreased rhythmic damage
+			Rhythmic projectiles inflict slowness in Tundra
+			'''
 	}
 
 	EbonwoodFretboard: {
 		DisplayName: Ebonwood Fretboard
-		Tooltip: ""
+		Tooltip:
+			'''
+			5% decreased track speed
+			15% increased rhythmic damage in Corruption
+			'''
 	}
 
 	PalmWoodFretboard: {
 		DisplayName: Palm Wood Fretboard
-		Tooltip: ""
+		Tooltip:
+			'''
+			5% increased track speed
+			10% increased rhythmic damage in Ocean/Beach
+			'''
 	}
 
 	RichMahoganyFretboard: {
 		DisplayName: Rich Mahogany Fretboard
-		Tooltip: ""
+		Tooltip:
+			'''
+			5% decreased track speed
+			15% increased rhythmic damage in Jungle
+			'''
 	}
 
 	ShadewoodFretboard: {
 		DisplayName: Shadewood Fretboard
-		Tooltip: ""
+		Tooltip:
+			'''
+			5% decreased track speed
+			15% increased rhythmic damage in Crimson
+			'''
 	}
 
 	WoodenFretboard: {
@@ -279,7 +187,11 @@ Items: {
 
 	MetallicShoeTaps: {
 		DisplayName: Metallic Shoe Taps
-		Tooltip: ""
+		Tooltip:
+			'''
+			'...and tap, tap, tap!'
+			5% increased rhythmic damage
+			'''
 	}
 
 	WoodenMetronome: {
@@ -289,17 +201,21 @@ Items: {
 
 	Pacemaker: {
 		DisplayName: Pacemaker
-		Tooltip: ""
+		Tooltip: Increases health on successful hit object hits
 	}
 
 	RhythmistEmblem: {
 		DisplayName: Rhythmist Emblem
-		Tooltip: ""
+		Tooltip: 15% increased rhythmic damage
 	}
 
 	TapCane: {
 		DisplayName: Tap Cane
-		Tooltip: ""
+		Tooltip:
+			'''
+			5% increased rhythmic damage
+			15% increased note rate
+			'''
 	}
 
 	ChocolateWaterBucket: {
@@ -311,6 +227,141 @@ Items: {
 		DisplayName: Fret Wire
 		Tooltip: ""
 	}
+
+	EnduranceChoreabilityCopper: {
+		DisplayName: Copper Endurance Choreability
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilityGold: {
+		DisplayName: Gold Endurance Choreability
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilityPlatinum: {
+		DisplayName: Platinum Endurance Choreability
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilitySilver: {
+		DisplayName: Silver Endurance Choreability
+		Tooltip: ""
+	}
+
+	EnduranceChoreabilityTerra: {
+		DisplayName: Terra Endurance Choreability
+		Tooltip: ""
+	}
+
+	EnduranceChoreability.ChoreabilityTooltip: Reduces damage taken by a maximum of {0}%
+
+	IronskinChoreabilityCopper: {
+		DisplayName: Copper Ironskin Choreability
+		Tooltip: ""
+	}
+
+	IronskinChoreabilityGold: {
+		DisplayName: Gold Ironskin Choreability
+		Tooltip: ""
+	}
+
+	IronskinChoreabilityPlatinum: {
+		DisplayName: Platinum Ironskin Choreability
+		Tooltip: ""
+	}
+
+	IronskinChoreabilitySilver: {
+		DisplayName: Silver Ironskin Choreability
+		Tooltip: ""
+	}
+
+	IronskinChoreabilityTerra: {
+		DisplayName: Terra Ironskin Choreability
+		Tooltip: ""
+	}
+
+	IronskinChoreability.ChoreabilityTooltip: Increases defense by a maximum of {1}
+
+	RageChoreabilityCopper: {
+		DisplayName: Copper Rage Choreability
+		Tooltip: ""
+	}
+
+	RageChoreabilityGold: {
+		DisplayName: Gold Rage Choreability
+		Tooltip: ""
+	}
+
+	RageChoreabilityPlatinum: {
+		DisplayName: Platinum Rage Choreability
+		Tooltip: ""
+	}
+
+	RageChoreabilitySilver: {
+		DisplayName: Silver Rage Choreability
+		Tooltip: ""
+	}
+
+	RageChoreabilityTerra: {
+		DisplayName: Terra Rage Choreability
+		Tooltip: ""
+	}
+
+	RageChoreability.ChoreabilityTooltip: Increases critical chance by a maximum of {0}%
+
+	SwiftnessChoreabilityCopper: {
+		DisplayName: Copper Swiftness Choreability
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilityGold: {
+		DisplayName: Gold Swiftness Choreability
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilityPlatinum: {
+		DisplayName: Platinum Swiftness Choreability
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilitySilver: {
+		DisplayName: Silver Swiftness Choreability
+		Tooltip: ""
+	}
+
+	SwiftnessChoreabilityTerra: {
+		DisplayName: Terra Swiftness Choreability
+		Tooltip: ""
+	}
+
+	SwiftnessChoreability.ChoreabilityTooltip: Increases movement speed by a maximum of {0}%
+
+	WrathChoreabilityCopper: {
+		DisplayName: Copper Wrath Choreability
+		Tooltip: ""
+	}
+
+	WrathChoreabilityGold: {
+		DisplayName: Gold Wrath Choreability
+		Tooltip: ""
+	}
+
+	WrathChoreabilityPlatinum: {
+		DisplayName: Platinum Wrath Choreability
+		Tooltip: ""
+	}
+
+	WrathChoreabilitySilver: {
+		DisplayName: Silver Wrath Choreability
+		Tooltip: ""
+	}
+
+	WrathChoreabilityTerra: {
+		DisplayName: Terra Wrath Choreability
+		Tooltip: ""
+	}
+
+	WrathChoreability.ChoreabilityTooltip: Increases damage by a maximum of {0}%
 }
 
 Projectiles: {

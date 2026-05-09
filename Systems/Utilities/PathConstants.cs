@@ -1,4 +1,4 @@
-﻿namespace EpicosityPort.Utilities
+﻿namespace EpicosityPort.Systems.Utilities
 {
 	public static class PathConstants
 	{

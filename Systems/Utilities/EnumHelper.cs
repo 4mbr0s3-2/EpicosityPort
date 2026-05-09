@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace EpicosityPort.Utilities
+namespace EpicosityPort.Systems.Utilities
 {
     public class EnumHelper
     {

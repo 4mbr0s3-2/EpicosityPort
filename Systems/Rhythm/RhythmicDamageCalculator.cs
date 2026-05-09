@@ -27,6 +27,9 @@ namespace EpicosityPort.Systems.Rhythm
         public float rhythmicComboDepletionRateMult = 1;
         public float rhythmicComboIncrementMult = 1;
         public float rhythmicNoteRateMult = 1;
+        // RS: Unused apparently
+        // I think I turned this into a setting instead of a game attribute LOL
+        [Obsolete]
         public double rhythmicTrackSpeedMult = 1;
         public int rhythmicCrit = 4;
 		public override void PreUpdateBuffs()

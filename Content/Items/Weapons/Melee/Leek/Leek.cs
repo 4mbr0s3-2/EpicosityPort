@@ -1,4 +1,4 @@
-﻿using EpicosityPort.Utilities;
+﻿using EpicosityPort.Systems.Utilities;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

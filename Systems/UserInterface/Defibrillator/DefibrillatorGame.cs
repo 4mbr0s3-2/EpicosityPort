@@ -1,6 +1,6 @@
 ﻿using EpicosityPort.Content.Items.Accessories.Rhythmist.DefibrillatorPack;
 using EpicosityPort.Effects.Shaders.Screen;
-using EpicosityPort.Utilities;
+using EpicosityPort.Systems.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;

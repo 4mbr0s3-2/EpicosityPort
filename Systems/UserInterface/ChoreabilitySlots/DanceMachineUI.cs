@@ -2,7 +2,7 @@
 using EpicosityPort.Content.Items.Rhythm.DanceCredits;
 using EpicosityPort.Content.Items.Tiles.DanceMachine;
 using EpicosityPort.Systems.Rhythm;
-using EpicosityPort.Utilities;
+using EpicosityPort.Systems.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -244,20 +244,19 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
                     string tierName = Enum.GetName(typeof(ChoreabilityTier), nextTier);
                     upgradeAnimationTierTexture = ModContent.Request<Texture2D>($"{typeof(ChoreabilityBase).GetNamespaceAsPath()}/TierCasings/{tierName}").Value;
 
-                    if (_danceCreditItemSlot.Item.stack <= 0)
-                    {
-                        _danceCreditItemSlot.Item.TurnToAir();
-                    }
+                    
                     string choreabilityName = Enum.GetName(typeof(ChoreabilityType), choreabilityBase.choreability.type);
                     string choreabilityTier = Enum.GetName(typeof(ChoreabilityTier), nextTier);
                     Item newItem = new Item();
                     string itemName = $"{choreabilityName}Choreability{choreabilityTier}";
                     bool v = ModContent.TryFind(EpicosityPort.Instance.Name, itemName, out ModItem item);
-                    if (item != null)
+                    if (v)
                     {
                         newItem.netDefaults(item.Type);
                         _choreabilityItemSlot.Item = newItem.Clone();
                         _danceCreditItemSlot.Item.stack -= ChoreabilityTierManager.GetNumberOfCreditsNeeded(nextTier);
+                        if (_danceCreditItemSlot.Item.stack <= 0)
+                            _danceCreditItemSlot.Item.TurnToAir();
                     }
                     else
                     {
@@ -289,24 +288,35 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
                 // A potion is in the slot instead
                 else if (ChoreabilityTierManager.PotionToChoreabilityType.ContainsKey(_choreabilityItemSlot.Item.type))
                 {
+                    // RS: Apparently I haven't considered the case where there is more than one potion stacked
+                    // So let's make it a feature
                     ChoreabilityType choreabilityType = ChoreabilityTierManager.PotionToChoreabilityType[_choreabilityItemSlot.Item.type];
-                    _danceCreditItemSlot.Item.stack -= ChoreabilityTierManager.GetNumberOfCreditsNeeded(ChoreabilityTier.Copper);
+                    int creditsNeeded = ChoreabilityTierManager.GetNumberOfCreditsNeeded(ChoreabilityTier.Copper);
+                    //_danceCreditItemSlot.Item.stack -= creditsNeeded;
 
                     upgradeAnimationTimer = 30;
                     string tierName = Enum.GetName(typeof(ChoreabilityTier), ChoreabilityTier.Copper);
                     upgradeAnimationTierTexture = ModContent.Request<Texture2D>($"{typeof(ChoreabilityBase).GetNamespaceAsPath()}/TierCasings/{tierName}").Value;
-                    if (_choreabilityItemSlot.Item.stack > 1)
-                    {
-                        Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_FromThis(), _choreabilityItemSlot.Item.Clone(), _choreabilityItemSlot.Item.stack - 1);
-                    }
-                    if (_danceCreditItemSlot.Item.stack <= 0)
-                    {
-                        _danceCreditItemSlot.Item.TurnToAir();
-                    }
                     string choreabilityName = Enum.GetName(typeof(ChoreabilityType), choreabilityType);
                     string choreabilityTier = Enum.GetName(typeof(ChoreabilityTier), ChoreabilityTier.Copper);
                     Item newItem = new Item();
-                    //newItem.netDefaults(Epicosity.inst.ItemType($"{choreabilityName}Choreability{choreabilityTier}"));
+                    //newItem.netDefaults(EpicosityPort.Instance.ItemType($"{choreabilityName}Choreability{choreabilityTier}"));
+                    string itemName = $"{choreabilityName}Choreability{choreabilityTier}";
+                    bool v = ModContent.TryFind(EpicosityPort.Instance.Name, itemName, out ModItem item);
+                    if (v)
+                    {
+                        if (_choreabilityItemSlot.Item.stack > 1)
+                            Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_FromThis(), _choreabilityItemSlot.Item.Clone(), _choreabilityItemSlot.Item.stack - 1);
+                        newItem.netDefaults(item.Type);
+                        _choreabilityItemSlot.Item = newItem.Clone();
+                        _danceCreditItemSlot.Item.stack -= creditsNeeded;
+                        if (_danceCreditItemSlot.Item.stack <= 0)
+                            _danceCreditItemSlot.Item.TurnToAir();
+                    }
+                    else
+                    {
+                        EpicosityPort.Instance.Logger.Error($"Could not find {itemName}!");
+                    }
                     _choreabilityItemSlot.Item = newItem.Clone();
                     SoundEngine.PlaySound(new SoundStyle($"{GetType().GetNamespaceAsPath()}/DMUpgradeCopperGold"));
                 }

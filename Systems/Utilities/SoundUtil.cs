@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using EpicosityPort.Systems.Network;
 using ReLogic.Utilities;
 
-namespace EpicosityPort.Utilities
+namespace EpicosityPort.Systems.Utilities
 {
 	public static class SoundUtil
 	{

@@ -4,10 +4,6 @@ namespace EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities
 {
     public class WrathChoreabilityPlatinum : WrathChoreability
     {
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("Platinum Wrath Choreability");
-        }
         public override void SetDefaults()
         {
             SetChoreability(ChoreabilityHelper.ChoreabilityTier.Platinum);

@@ -10,10 +10,10 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using System;
 using EpicosityPort.Systems.Rhythm;
-using EpicosityPort.Utilities;
 using EpicosityPort.Systems.UserInterface.ChoreabilitySlots;
 using EpicosityPort.Effects.Shaders.Screen;
 using EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities;
+using EpicosityPort.Systems.Utilities;
 
 namespace EpicosityPort.Systems.UserInterface.Rhythm.ComboBar
 {

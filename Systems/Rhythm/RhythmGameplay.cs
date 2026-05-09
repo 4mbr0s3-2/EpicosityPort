@@ -2,7 +2,7 @@
 using EpicosityPort.Systems.UserInterface;
 using EpicosityPort.Systems.UserInterface.Rhythm;
 using EpicosityPort.Systems.UserInterface.Rhythm.Metronome;
-using EpicosityPort.Utilities;
+using EpicosityPort.Systems.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System;

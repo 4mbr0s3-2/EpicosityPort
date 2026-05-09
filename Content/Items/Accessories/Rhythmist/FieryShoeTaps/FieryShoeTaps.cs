@@ -19,8 +19,10 @@ namespace EpicosityPort.Content.Items.Accessories.Rhythmist.FieryShoeTaps
 		}
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-			player.GetModPlayer<ModPlayerRhythmicPlayerStats>().rhythmicDamageMult += 0.5f;
-			player.GetModPlayer<ModPlayerRhythmistAccessories>().hasFlamingAccessory = true;
+			// RS: I DON'T THINK THAT'S 5%
+			//player.GetModPlayer<ModPlayerRhythmicPlayerStats>().rhythmicDamageMult += 0.5f;
+            player.GetModPlayer<ModPlayerRhythmicPlayerStats>().rhythmicDamageMult += 0.05f;
+            player.GetModPlayer<ModPlayerRhythmistAccessories>().hasFlamingAccessory = true;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿using EpicosityPort.Systems.UserInterface.Rhythm;
-using EpicosityPort.Utilities;
+using EpicosityPort.Systems.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;

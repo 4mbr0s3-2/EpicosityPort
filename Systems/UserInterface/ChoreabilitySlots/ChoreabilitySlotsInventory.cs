@@ -1,7 +1,7 @@
 ﻿using EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities;
 using EpicosityPort.Content.Items.Accessories.Rhythmist.Fretboards;
 using EpicosityPort.Systems.UserInterface;
-using EpicosityPort.Utilities;
+using EpicosityPort.Systems.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -231,13 +231,13 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
         }
         public override void OnModLoad()
         {
-            Terraria.UI.On_ItemSlot.SelectEquipPage += ItemSlotChoreabilityEquip;
-            Terraria.UI.On_ItemSlot.SwapEquip_ItemArray_int_int += ItemSlot_SwapChoreability;
+            On_ItemSlot.SelectEquipPage += ItemSlotChoreabilityEquip;
+            On_ItemSlot.SwapEquip_ItemArray_int_int += ItemSlot_SwapChoreability;
         }
         public override void OnModUnload()
         {
-            Terraria.UI.On_ItemSlot.SelectEquipPage -= ItemSlotChoreabilityEquip;
-            Terraria.UI.On_ItemSlot.SwapEquip_ItemArray_int_int -= ItemSlot_SwapChoreability;
+            On_ItemSlot.SelectEquipPage -= ItemSlotChoreabilityEquip;
+            On_ItemSlot.SwapEquip_ItemArray_int_int -= ItemSlot_SwapChoreability;
         }
     }
 }

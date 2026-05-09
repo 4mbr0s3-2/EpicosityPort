@@ -1,8 +1,10 @@
-﻿using EpicosityPort.Utilities;
+﻿using EpicosityPort.Systems.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static EpicosityPort.Systems.Rhythm.ChoreabilityHelper;
 
@@ -11,8 +13,17 @@ namespace EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities
     // RS: Why did I make this abstract when it doesn't have any abstract methods? Maybe it's to prevent direct instantiation.
     public abstract class ChoreabilityBase : ModItem
     {
+        public virtual LocalizedText ChoreabilityTooltip => LocalizedText.Empty;
         protected override bool CloneNewInstances => true;
         public Choreability choreability;
+        public override void SetStaticDefaults()
+        {
+            _ = ChoreabilityTooltip;
+        }
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            tooltips.Add(new TooltipLine(Mod, "Choreability", ChoreabilityTooltip.Format((int)(choreability.strength * 100), (int)choreability.strength)));
+        }
         public override void SetDefaults()
         {
             Item.width = 32;

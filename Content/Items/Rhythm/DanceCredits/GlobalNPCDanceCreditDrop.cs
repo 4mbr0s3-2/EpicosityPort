@@ -34,6 +34,8 @@ namespace EpicosityPort.Content.Items.Rhythm.DanceCredits
             {
                 { NPCID.KingSlime, new DanceCreditDropInfo(4, 6, ModContent.ItemType<CopperDanceCredit>()) },
                 { NPCID.EyeofCthulhu, new DanceCreditDropInfo(4, 8, ModContent.ItemType<CopperDanceCredit>()) },
+                { NPCID.EaterofWorldsHead, new DanceCreditDropInfo(4, 8, ModContent.ItemType<CopperDanceCredit>()) },
+                { NPCID.BrainofCthulhu, new DanceCreditDropInfo(4, 8, ModContent.ItemType<CopperDanceCredit>()) },
                 { NPCID.QueenBee, new DanceCreditDropInfo(4, 10, ModContent.ItemType<SilverDanceCredit>()) },
                 { NPCID.SkeletronHead, new DanceCreditDropInfo(6, 10, ModContent.ItemType<SilverDanceCredit>()) },
                 { NPCID.WallofFlesh, new DanceCreditDropInfo(4, 8, ModContent.ItemType<GoldDanceCredit>()) },

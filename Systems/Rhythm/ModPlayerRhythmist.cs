@@ -1,5 +1,5 @@
 ﻿using EpicosityPort.Systems.UserInterface.Rhythm;
-using EpicosityPort.Utilities;
+using EpicosityPort.Systems.Utilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;

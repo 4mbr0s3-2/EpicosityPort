@@ -2,7 +2,7 @@
 
 
 // RS: Maybe I should've just added all of them?
-namespace EpicosityPort.Utilities
+namespace EpicosityPort.Systems.Utilities
 {
     /// <summary>
     /// All functions derived from https://easings.net/.

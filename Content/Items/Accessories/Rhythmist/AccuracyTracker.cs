@@ -1,5 +1,5 @@
 ﻿using EpicosityPort.Systems.Rhythm;
-using EpicosityPort.Utilities;
+using EpicosityPort.Systems.Utilities;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -19,5 +19,9 @@ namespace EpicosityPort.Content.Items.Accessories.Rhythmist
 			var p = player.GetModPlayer<ModPlayerRhythmistAccessories>();
 			p.hasAccuracyTracker = true;
 		}
+        public override void UpdateInventory(Player player)
+        {
+			UpdateAccessory(player, false);
+        }
 	}
 }
