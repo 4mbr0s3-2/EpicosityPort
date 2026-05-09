@@ -3,17 +3,22 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace EpicosityPort.Content.Items.Weapons.Rhythmic.StickyKeys
 {
 	public class StickyKeys : RhythmicWeaponBase
 	{
-		public override string ComboBarBonusText()
-		{
-			return "Shoot a barrage of sticky slime balls";
-		}
-		public override void SetRhythmistDefaults()
+        //public override string ComboBarBonusText()
+        //{
+        //	return "Shoot a barrage of sticky slime balls";
+        //}
+        public override LocalizedText ComboBarBonusText()
+        {
+            return this.GetLocalization(nameof(ComboBarBonusText));
+        }
+        public override void SetRhythmistDefaults()
 		{
 			Item.damage = 14;
 			Item.shoot = ModContent.ProjectileType<StickySlimeBall>();

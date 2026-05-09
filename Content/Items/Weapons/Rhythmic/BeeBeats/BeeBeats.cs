@@ -3,16 +3,22 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace EpicosityPort.Content.Items.Weapons.Rhythmic.BeeBeats
 {
 	public class BeeBeats : RhythmicWeaponBase
 	{
-		public override string ComboBarBonusText()
-		{
-			return "Shoot multiple giant bees";
-		}
-		public override void SetRhythmistDefaults()
+        //public override string ComboBarBonusText()
+        //{
+        //	return "Shoot multiple giant bees";
+        //}
+        public override LocalizedText ComboBarBonusText()
+        {
+            return this.GetLocalization(nameof(ComboBarBonusText));
+        }
+        public override void SetRhythmistDefaults()
 		{
 			Item.damage = 20;
 			Item.UseSound = SoundID.Item97; // The Bee's Knees

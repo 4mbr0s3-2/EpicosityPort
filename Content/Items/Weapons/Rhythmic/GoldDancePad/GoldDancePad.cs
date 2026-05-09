@@ -3,15 +3,20 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace EpicosityPort.Content.Items.Weapons.Rhythmic.GoldDancePad
 {
 	public class GoldDancePad : RhythmicWeaponBase
     {
-        public override string ComboBarBonusText()
+        //public override string ComboBarBonusText()
+        //{
+        //    return "Shoot three pellets in a line";
+        //}
+        public override LocalizedText ComboBarBonusText()
         {
-            return "Shoot three pellets in a line";
+            return this.GetLocalization(nameof(ComboBarBonusText));
         }
         public override void SetRhythmistDefaults()
         {

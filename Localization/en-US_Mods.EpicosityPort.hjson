@@ -1,6 +1,15 @@
 Tiles.MemeiteOreTile.MapEntry: Memeite Ore Tile
 DeathMessages.RhythmMiss: "{0} did not feel the rhythm."
 
+Rhythmic: {
+	ComboBarBonusTooltip:
+		'''
+		[c/FFFF00:Combo bar bonus:]
+		{0}
+		'''
+	DamageTooltip: "{0} rhythmic damage"
+}
+
 Items: {
 	MemeiteBar: {
 		DisplayName: Memeite Bar
@@ -63,7 +72,7 @@ Items: {
 	}
 
 	DanceMachineItem: {
-		DisplayName: Dance Machine Item
+		DisplayName: Dance Machine
 		Tooltip: ""
 	}
 
@@ -79,36 +88,43 @@ Items: {
 	BeeBeats: {
 		DisplayName: Bee Beats
 		Tooltip: ""
+		ComboBarBonusText: Shoot multiple giant bees
 	}
 
 	DeathlyHeroGuitar: {
 		DisplayName: Deathly Hero Guitar
 		Tooltip: ""
+		ComboBarBonusText: Shoot three crimcells
 	}
 
 	GoldDancePad: {
 		DisplayName: Gold Dance Pad
 		Tooltip: ""
+		ComboBarBonusText: Shoot three pellets in a line
 	}
 
 	PlatinumDancePad: {
 		DisplayName: Platinum Dance Pad
 		Tooltip: ""
+		ComboBarBonusText: Shoot three pellets in a line
 	}
 
 	StickyKeys: {
 		DisplayName: Sticky Keys
 		Tooltip: ""
+		ComboBarBonusText: Shoot a barrage of sticky slime balls
 	}
 
 	VileHeroGuitar: {
 		DisplayName: Vile Hero Guitar
 		Tooltip: ""
+		ComboBarBonusText: Shoot three spreaded vilespikes
 	}
 
 	WoodenDancePad: {
 		DisplayName: Wooden Dance Pad
 		Tooltip: ""
+		ComboBarBonusText: Shoot three spreaded pellets
 	}
 
 	AccuracyTracker: {

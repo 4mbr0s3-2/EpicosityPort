@@ -3,17 +3,22 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace EpicosityPort.Content.Items.Weapons.Rhythmic.WoodenDancePad
 {
 	public class WoodenDancePad : RhythmicWeaponBase
 	{
-		public override string ComboBarBonusText()
-		{
-			return "Shoot three spreaded pellets";
-		}
-		public override void SetRhythmistDefaults()
+        //public override string ComboBarBonusText()
+        //{
+        //	return "Shoot three spreaded pellets";
+        //}
+        public override LocalizedText ComboBarBonusText()
+        {
+            return this.GetLocalization(nameof(ComboBarBonusText));
+        }
+        public override void SetRhythmistDefaults()
 		{
 			Item.damage = 8;
 			Item.shoot = ModContent.ProjectileType<WoodenPellet>();

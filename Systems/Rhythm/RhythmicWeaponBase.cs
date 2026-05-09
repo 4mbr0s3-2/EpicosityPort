@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using static EpicosityPort.Systems.Rhythm.RhythmHandler;
 
@@ -52,6 +53,10 @@ namespace EpicosityPort.Systems.Rhythm
 		{
 			return 0;
 		}
+        public override void SetStaticDefaults()
+        {
+			_ = ComboBarBonusText(); // For localization
+        }
 		public sealed override void SetDefaults()
 		{
 			SetRhythmistDefaults();
@@ -103,6 +108,6 @@ namespace EpicosityPort.Systems.Rhythm
 		/// Return a string that will be used as the tooltip for the full combo bar bonus.
 		/// </summary>
 		/// <returns></returns>
-		public virtual string ComboBarBonusText() { return ""; }
+		public virtual LocalizedText ComboBarBonusText() { return LocalizedText.Empty; }
 	}
 }

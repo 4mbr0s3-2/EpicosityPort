@@ -16,7 +16,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 		RenderTarget2D pendulum;
 		public WoodenMetronomeVisual()
 		{
-			woodenMetronome = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Wooden").Value;
+			woodenMetronome = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Wooden", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
             pendulum = new RenderTarget2D(Main.instance.GraphicsDevice, 10, 50, false, SurfaceFormat.Color, DepthFormat.None);
         }
 		public override void Beat(bool strong)
@@ -44,6 +44,8 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 			// How did I not notice this
 			//pendulum = new RenderTarget2D(Main.instance.GraphicsDevice, 10, 50, false, SurfaceFormat.Color, DepthFormat.None);
 			
+			// RS TODO: Make this pendulum NOT use a render target
+
 			float bpm = 60f / crotchet;
 			bpm /= 20f;
 			Main.instance.GraphicsDevice.SetRenderTarget(pendulum);

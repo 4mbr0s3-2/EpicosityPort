@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using static EpicosityPort.Systems.Rhythm.RhythmHandler;
@@ -72,7 +73,7 @@ namespace EpicosityPort.Systems.Rhythm
         {
             if (rhythmic)
             {
-                tooltips.Find((tooltip1) => tooltip1.Name == "Damage").Text = Main.LocalPlayer.GetWeaponDamage(item) + " rhythmic damage";
+                tooltips.Find((tooltip1) => tooltip1.Name == "Damage").Text = Mod.GetLocalization("Rhythmic.DamageTooltip").Format(Main.LocalPlayer.GetWeaponDamage(item));
                 #region Display modifiers
                 //if (trackSpeed != defaultTrackSpeed)
                 //{
@@ -147,8 +148,8 @@ namespace EpicosityPort.Systems.Rhythm
                 if (item.ModItem is RhythmicWeaponBase)
 				{
                     RhythmicWeaponBase rhythmicWeapon = item.ModItem as RhythmicWeaponBase;
-                    string comboBarBonus = rhythmicWeapon.ComboBarBonusText();
-                    if (comboBarBonus != "")
+                    LocalizedText comboBarBonus = rhythmicWeapon.ComboBarBonusText();
+                    if (comboBarBonus != LocalizedText.Empty)
 					{
                         tooltips.Add
                         (
@@ -156,7 +157,8 @@ namespace EpicosityPort.Systems.Rhythm
                             (
                                 Mod,
                                 "ComboBarBonus",
-                                $"[c/FFFF00:Combo bar bonus:]\n{comboBarBonus}"
+                                //$"[c/FFFF00:Combo bar bonus:]\n{comboBarBonus}"
+                                Mod.GetLocalization("Rhythmic.ComboBarBonusTooltip").Format(comboBarBonus.Value)
                             )
                         );
 					}

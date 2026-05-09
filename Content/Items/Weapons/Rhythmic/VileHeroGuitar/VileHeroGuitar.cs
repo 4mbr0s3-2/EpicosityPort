@@ -3,15 +3,20 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace EpicosityPort.Content.Items.Weapons.Rhythmic.VileHeroGuitar
 {
 	public class VileHeroGuitar : RhythmicWeaponBase
     {
-        public override string ComboBarBonusText()
+        //public override string ComboBarBonusText()
+        //{
+        //    return "Shoot three spreaded vilespikes";
+        //}
+        public override LocalizedText ComboBarBonusText()
         {
-            return "Shoot three spreaded vilespikes";
+            return this.GetLocalization(nameof(ComboBarBonusText));
         }
         public override void SetRhythmistDefaults()
         {

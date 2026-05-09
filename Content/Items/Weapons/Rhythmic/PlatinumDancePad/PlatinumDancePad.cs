@@ -3,17 +3,22 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace EpicosityPort.Content.Items.Weapons.Rhythmic.PlatinumDancePad
 {
 	public class PlatinumDancePad : RhythmicWeaponBase
     {
-		public override string ComboBarBonusText()
-		{
-			return "Shoot three pellets in a line";
-		}
-		public override void SetRhythmistDefaults()
+        //public override string ComboBarBonusText()
+        //{
+        //	return "Shoot three pellets in a line";
+        //}
+        public override LocalizedText ComboBarBonusText()
+        {
+            return this.GetLocalization(nameof(ComboBarBonusText));
+        }
+        public override void SetRhythmistDefaults()
         {
             Item.damage = 12;
             Item.shoot = ModContent.ProjectileType<PlatinumPellet>();
