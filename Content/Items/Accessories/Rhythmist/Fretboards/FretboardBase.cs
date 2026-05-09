@@ -25,7 +25,7 @@ namespace EpicosityPort.Content.Items.Accessories.Rhythmist.Fretboards
 		// RS: Thank you tModPorter
 		public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
         {
-			return incomingItem.ModItem is not FretboardBase;
+			return equippedItem.ModItem is not FretboardBase || incomingItem.ModItem is not FretboardBase;
         }
 	}
 }

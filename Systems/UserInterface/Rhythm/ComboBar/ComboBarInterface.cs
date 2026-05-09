@@ -52,7 +52,9 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.ComboBar
 			protected override void DrawSelf(SpriteBatch spriteBatch)
 			{
 				base.DrawSelf(spriteBatch);
-				float comboMeter = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmist>().comboMeter;
+                ModPlayerRhythmist modPlayerRhythmist = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmist>();
+                ModPlayerRhythmistAccessories modPlayerRhythmistAccessories = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmistAccessories>();
+                float comboMeter = modPlayerRhythmist.comboMeter;
 				Vector2 barSize = new Vector2(186, 32);
 				int shake = (int)ComboBarInterface.Instance.shake;
 				float fullComboAnimation = ComboBarInterface.Instance.fullComboAnimation;
@@ -140,7 +142,8 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.ComboBar
 				#endregion
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
-				DrawAccuracyBar(barSize, shakeOffset, barPosition, spriteBatch);
+				if (modPlayerRhythmistAccessories.hasAccuracyTracker)
+					DrawAccuracyBar(barSize, shakeOffset, barPosition, spriteBatch);
 			}
 			public void AddMarker(float accuracy, Color color)
 			{

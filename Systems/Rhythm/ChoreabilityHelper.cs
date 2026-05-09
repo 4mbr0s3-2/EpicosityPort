@@ -30,6 +30,8 @@ namespace EpicosityPort.Systems.Rhythm
         public static Choreability BuildChoreability(ChoreabilityType choreabilityType, ChoreabilityTier choreabilityLevel, float choreabilityStrength = -1)
         {
             Action<Player, float, float> playerModifier;
+            // RS: Somethin' somethin' switch case abuse use
+            // Choreability more like CHOREability 😂😂😂😂
             switch (choreabilityType)
             {
                 case ChoreabilityType.Endurance:
@@ -48,11 +50,13 @@ namespace EpicosityPort.Systems.Rhythm
                     playerModifier = (player, comboMeter, strength) =>
                     {
                         // TODO: Add Rogue from Calamity and Bard and Healer from Thorium
-                        player.GetCritChance(DamageClass.Melee) += (int)(comboMeter * strength * 100);
-                        player.GetCritChance(DamageClass.Ranged) += (int)(comboMeter * strength * 100);
-                        player.GetCritChance(DamageClass.Magic) += (int)(comboMeter * strength * 100);
-                        player.GetCritChance(DamageClass.Throwing) += (int)(comboMeter * strength * 100);
-                        player.GetModPlayer<ModPlayerRhythmicPlayerStats>().rhythmicCrit += (int)(comboMeter * strength * 100);
+                        //player.GetCritChance(DamageClass.Melee) += (int)(comboMeter * strength * 100);
+                        //player.GetCritChance(DamageClass.Ranged) += (int)(comboMeter * strength * 100);
+                        //player.GetCritChance(DamageClass.Magic) += (int)(comboMeter * strength * 100);
+                        //player.GetCritChance(DamageClass.Throwing) += (int)(comboMeter * strength * 100);
+                        // RS: No need for that now
+                        player.GetCritChance(DamageClass.Generic) += (int)(comboMeter * strength * 100);
+                        //player.GetModPlayer<ModPlayerRhythmicPlayerStats>().rhythmicCrit += (int)(comboMeter * strength * 100);
                     };
                     break;
                 case ChoreabilityType.Swiftness:

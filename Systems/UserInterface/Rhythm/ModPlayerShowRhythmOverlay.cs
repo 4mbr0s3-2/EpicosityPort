@@ -1,10 +1,8 @@
-﻿using EpicosityPort;
-using EpicosityPort.Systems.Network;
+﻿using EpicosityPort.Systems.Network;
 using EpicosityPort.Systems.Rhythm;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static EpicosityPort.Systems.Rhythm.ModPlayerRhythmist;
 using static EpicosityPort.Systems.Rhythm.RhythmHandler;
 using static EpicosityPort.Systems.Rhythm.RhythmPatterns;
 

@@ -78,7 +78,7 @@ namespace EpicosityPort.Systems.Rhythm
 		public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
 		{
 			ModPlayerRhythmicPlayerStats stats = player.GetModPlayer<ModPlayerRhythmicPlayerStats>();
-			damage = new StatModifier(1, stats.rhythmicDamageMult, stats.flatRhythmicDamage);
+			damage = damage.CombineWith(new StatModifier(1, stats.rhythmicDamageMult, stats.flatRhythmicDamage));
 		}
 		public override void ModifyWeaponCrit(Player player, ref float crit)
 		{

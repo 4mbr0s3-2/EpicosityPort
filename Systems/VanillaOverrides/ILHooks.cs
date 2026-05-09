@@ -1,6 +1,10 @@
-﻿using EpicosityPort.Systems.UserInterface.VanillaOverrides;
+﻿using EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities;
+using EpicosityPort.Content.Items.Accessories.Rhythmist.Fretboards;
+using EpicosityPort.Systems.UserInterface.ChoreabilitySlots;
+using EpicosityPort.Systems.UserInterface.VanillaOverrides;
 using MonoMod.Cil;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace EpicosityPort.Systems.VanillaOverrides
@@ -57,7 +61,7 @@ namespace EpicosityPort.Systems.VanillaOverrides
             //Terraria.On_Main.StartRain += ChocolateRainManager.StartChocolateRain;
             //Terraria.On_Main.StopRain += ChocolateRainManager.StopChocolateRain;
             // Choreability equips
-            //Terraria.UI.On_ItemSlot.EquipPage += ItemSlotChoreabilityEquip;
+            //Terraria.UI.On_ItemSlot.SelectEquipPage += ItemSlotChoreabilityEquip;
             //Terraria.UI.On_ItemSlot.SwapEquip_ItemArray_int_int += ItemSlot_SwapChoreability;
             // Rarity text
             //On.Terraria.ItemText.NewText += EpicosityItemRarity.ItemText_NewText;
@@ -82,50 +86,51 @@ namespace EpicosityPort.Systems.VanillaOverrides
             //SpeedyBridger.Player_PlaceThing(orig, self);
         }
 
+        // RS: Move to ChoreabilitySlotsInventory
         //private static void ItemSlot_SwapChoreability(Terraria.UI.On_ItemSlot.orig_SwapEquip_ItemArray_int_int orig, Item[] inv, int context, int slot)
         //{
-        //	bool success = false;
-        //	if (inv[slot].ModItem is ChoreabilityBase)
-        //	{
-        //		inv[slot] = ChoreabilitySlotsInventory.ChoreabilitySwap(inv[slot], out success);
-        //		if (success)
-        //		{
-        //			(ChoreabilitySlotsInventory.ChoreabilityInventoryUIStateSingleton as ChoreabilitySlotsInventory.ChoreabilityInventoryUI).choreabilitySelectedPage = 1;
-        //		}
-        //	}
-        //	else if (inv[slot].ModItem is FretboardBase)
-        //	{
-        //		Item result;
-        //		Player player = Main.player[Main.myPlayer];
-        //		result = inv[slot];
-        //		for (int i = 0; i < player.armor.Length; i++)
-        //		{
-        //			if (player.armor[i].ModItem is FretboardBase)
-        //			{
-        //				result = player.armor[i].Clone();
-        //				player.armor[i] = inv[slot].Clone();
-        //				success = true;
-        //				SoundEngine.PlaySound(SoundID.Grab);
-        //				Recipe.FindRecipes();
-        //				break;
-        //			}
-        //		}
-        //		inv[slot] = result;
-        //		if (success)
-        //		{
-        //			Main.EquipPageSelected = 0;
-        //		}
-        //	}
-        //	orig(inv, context, slot);
+        //    bool success = false;
+        //    if (inv[slot].ModItem is ChoreabilityBase)
+        //    {
+        //        inv[slot] = ChoreabilitySlotsInventory.Instance.ChoreabilitySwap(inv[slot], out success);
+        //        if (success)
+        //        {
+        //            (ChoreabilitySlotsInventory.Instance.ChoreabilityInventoryUIStateSingleton as ChoreabilitySlotsInventory.ChoreabilityInventoryUI).choreabilitySelectedPage = 1;
+        //        }
+        //    }
+        //    else if (inv[slot].ModItem is FretboardBase)
+        //    {
+        //        Item result;
+        //        Player player = Main.player[Main.myPlayer];
+        //        result = inv[slot];
+        //        for (int i = 0; i < player.armor.Length; i++)
+        //        {
+        //            if (player.armor[i].ModItem is FretboardBase)
+        //            {
+        //                result = player.armor[i].Clone();
+        //                player.armor[i] = inv[slot].Clone();
+        //                success = true;
+        //                SoundEngine.PlaySound(SoundID.Grab);
+        //                Recipe.FindRecipes();
+        //                break;
+        //            }
+        //        }
+        //        inv[slot] = result;
+        //        if (success)
+        //        {
+        //            Main.EquipPageSelected = 0;
+        //        }
+        //    }
+        //    orig(inv, context, slot);
         //}
 
-        //private static void ItemSlotChoreabilityEquip(Terraria.UI.On_ItemSlot.orig_EquipPage orig, Item item)
+        //private static void ItemSlotChoreabilityEquip(Terraria.UI.On_ItemSlot.orig_SelectEquipPage orig, Item item)
         //{
-        //	orig(item);
-        //	if (item.ModItem is ChoreabilityBase)
-        //	{
-        //		(ChoreabilitySlotsInventory.ChoreabilityInventoryUIStateSingleton as ChoreabilitySlotsInventory.ChoreabilityInventoryUI).choreabilityPage = 1;
-        //	}
+        //    orig(item);
+        //    if (item.ModItem is ChoreabilityBase)
+        //    {
+        //        (ChoreabilitySlotsInventory.Instance.ChoreabilityInventoryUIStateSingleton as ChoreabilitySlotsInventory.ChoreabilityInventoryUI).choreabilityPage = 1;
+        //    }
         //}
 
         //public static void Main_UpdateAudio_CalamityEasterEgg(ILContext il)

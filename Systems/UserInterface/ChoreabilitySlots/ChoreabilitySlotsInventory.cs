@@ -1,4 +1,5 @@
 ﻿using EpicosityPort.Content.Items.Accessories.Rhythmist.Choreabilities;
+using EpicosityPort.Content.Items.Accessories.Rhythmist.Fretboards;
 using EpicosityPort.Systems.UserInterface;
 using EpicosityPort.Utilities;
 using Microsoft.Xna.Framework;
@@ -70,9 +71,9 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
             public List<VanillaItemSlotWrapper> vanillaItemSlotWrappers = new List<VanillaItemSlotWrapper>();
             public override void OnInitialize()
             {
-                choreabilityButton = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InventoryButton1").Value;
-                choreabilityButtonHover = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InventoryButton2").Value;
-                choreabilityButtonSelected = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InventoryButton3").Value;
+                choreabilityButton = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InventoryButton1", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                choreabilityButtonHover = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InventoryButton2", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                choreabilityButtonSelected = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InventoryButton3", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
                 int spaceBetweenSlots = 0;
                 for (int itemSlotIndex = 0; itemSlotIndex < ChoreabilitySlotsPlayer.NUM_OF_CHOREABILITY_SLOTS; itemSlotIndex++)
                 {
@@ -183,6 +184,60 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
                     }
                 }
             }
+        }
+        private static void ItemSlot_SwapChoreability(Terraria.UI.On_ItemSlot.orig_SwapEquip_ItemArray_int_int orig, Item[] inv, int context, int slot)
+        {
+            bool success = false;
+            if (inv[slot].ModItem is ChoreabilityBase)
+            {
+                inv[slot] = ChoreabilitySlotsInventory.Instance.ChoreabilitySwap(inv[slot], out success);
+                if (success)
+                {
+                    (ChoreabilitySlotsInventory.Instance.ChoreabilityInventoryUIStateSingleton as ChoreabilitySlotsInventory.ChoreabilityInventoryUI).choreabilitySelectedPage = 1;
+                }
+            }
+            else if (inv[slot].ModItem is FretboardBase)
+            {
+                Item result;
+                Player player = Main.player[Main.myPlayer];
+                result = inv[slot];
+                for (int i = 0; i < player.armor.Length; i++)
+                {
+                    if (player.armor[i].ModItem is FretboardBase)
+                    {
+                        result = player.armor[i].Clone();
+                        player.armor[i] = inv[slot].Clone();
+                        success = true;
+                        SoundEngine.PlaySound(SoundID.Grab);
+                        Recipe.FindRecipes();
+                        break;
+                    }
+                }
+                inv[slot] = result;
+                if (success)
+                {
+                    Main.EquipPageSelected = 0;
+                }
+            }
+            orig(inv, context, slot);
+        }
+        private static void ItemSlotChoreabilityEquip(Terraria.UI.On_ItemSlot.orig_SelectEquipPage orig, Item item)
+        {
+            orig(item);
+            if (item.ModItem is ChoreabilityBase)
+            {
+                (ChoreabilitySlotsInventory.Instance.ChoreabilityInventoryUIStateSingleton as ChoreabilitySlotsInventory.ChoreabilityInventoryUI).choreabilityPage = 1;
+            }
+        }
+        public override void OnModLoad()
+        {
+            Terraria.UI.On_ItemSlot.SelectEquipPage += ItemSlotChoreabilityEquip;
+            Terraria.UI.On_ItemSlot.SwapEquip_ItemArray_int_int += ItemSlot_SwapChoreability;
+        }
+        public override void OnModUnload()
+        {
+            Terraria.UI.On_ItemSlot.SelectEquipPage -= ItemSlotChoreabilityEquip;
+            Terraria.UI.On_ItemSlot.SwapEquip_ItemArray_int_int -= ItemSlot_SwapChoreability;
         }
     }
 }
