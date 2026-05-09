@@ -40,6 +40,8 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 		{
 			// RS: Uhhhh yeah no
 			// How did my PC even handle this back then
+			// How did I let this happen
+			// How did I not notice this
 			//pendulum = new RenderTarget2D(Main.instance.GraphicsDevice, 10, 50, false, SurfaceFormat.Color, DepthFormat.None);
 			
 			float bpm = 60f / crotchet;

@@ -13,7 +13,6 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using static EpicosityPort.Systems.Rhythm.ModPlayerRhythmist;
 namespace EpicosityPort.Systems.Rhythm;
 
 // RS: Dude what a GODCLASS
@@ -38,8 +37,16 @@ public class RhythmHandler : ModSystem
 			Interface = new RhythmInterface();
 		}
 		public int lockedTargetIndex = -1;
-		public int targetWhoAmI = -1;
-		public int targetOrderedNumber = 0;
+		public int autoAimTargetWhoAmI = -1;
+		public int autoAimTargetOrderedNumber = 0;
+		public bool autoAiming = false;
+		public bool IsAutoAiming
+		{
+			get
+			{
+				return lockedTargetIndex >= 0 || autoAiming;
+			}
+		}
 
 		public SoundEffectInstance uiSound;
 		/// <summary>Minimum distance the mouse has to move from the start point in swipe gameplay.</summary>
@@ -48,7 +55,6 @@ public class RhythmHandler : ModSystem
 		public const float PENALTY_TICKS = 50f;
 		public float playfieldHeight { get { return EpicosityConfigClient.Instance.FKTrackHeight; } }
 		public Vector2 targetPosition = Vector2.Zero;
-		public bool targeting = false;
 		public bool mouseTargeting = false;
 		//public static float rotationFromMouseStartPositionToCursor = 0;
 
@@ -124,23 +130,27 @@ public class RhythmHandler : ModSystem
 			Swipe,
 			Miscellaneous,
 		}
-    //[LoadManager(LoadManagerAttribute.ManageType.Load)]
-    //public static void Load()
-    //{
-    //	inst = new RhythmHandler(); 
-    //	inst.LoadRhythmHotKeys(Epicosity.inst);
-    //	inst.LoadTrackPatterns();
-    //}
-    //[LoadManager(LoadManagerAttribute.ManageType.Unload)]
-    //public static void Unload()
-    //{
-    //	inst = null;
-    //}
-    public override void OnModLoad()
-    {
+	//[LoadManager(LoadManagerAttribute.ManageType.Load)]
+	//public static void Load()
+	//{
+	//	inst = new RhythmHandler(); 
+	//	inst.LoadRhythmHotKeys(Epicosity.inst);
+	//	inst.LoadTrackPatterns();
+	//}
+	//[LoadManager(LoadManagerAttribute.ManageType.Unload)]
+	//public static void Unload()
+	//{
+	//	inst = null;
+	//}
+	public override void OnModLoad()
+	{
 		Keybinds = new RhythmKeybinds();
 		Keybinds.LoadRhythmHotKeys(Mod);
-    }
+	}
+	public override void OnModUnload()
+	{
+		Interface.Dispose();
+	}
 	public static GameplayType gameplayType = GameplayType.Miscellaneous;
 	/// <summary>Applies only for note gameplay.</summary>
 	public static GameplayNoteDisplayStyle gameplayNoteDisplayStyle = GameplayNoteDisplayStyle.FourKey;
@@ -152,7 +162,6 @@ public class RhythmHandler : ModSystem
 	}
 	public void LockTarget(int npcIndex)
 	{
-		targeting = true;
 		//uiSound = ModContent.GetSound($"{typeof(Epicosity).Name}/Sounds/Item/Rhythmic/TargetLock").CreateInstance();
 		//uiSound.Volume = Main.soundVolume;
 		//uiSound.Play();
@@ -211,6 +220,8 @@ public class RhythmHandler : ModSystem
 			}
 		}
 	}
+	// RS: What a MESS
+	// 4K behavior gets delegated to RhythmNote.Update() (as shown above) but GH behavior is right here
 	public void UpdateGuitarHeroHitting(ModPlayerRhythmist dancePlayer, ref bool noMiss)
 	{
 		noMiss = true;
@@ -233,11 +244,6 @@ public class RhythmHandler : ModSystem
 					note.time -= dancePlayer.trackSpeed;
 					//}
 				} // Actual chart movement
-				if (note.time <= -30)
-				{
-					chart.Remove(note);
-					continue;
-				}
 				if (Math.Abs(note.time) <= timingWindow && !note.initialHit && strum && heldDown[note.column] && !successfulColumns[note.column]) // Hit range
 				{
 					successfulColumns[note.column] = true; // Note has been hit on that column
@@ -253,6 +259,7 @@ public class RhythmHandler : ModSystem
 						NoteHit((float)note.time);
 					}
 				}
+				// RS: This is not a good idea
 				// Check if hold note is still being held down, subtract from holdTime
 				if (note.initialHit && note.hold && heldDown[note.column])
 				{
@@ -278,6 +285,12 @@ public class RhythmHandler : ModSystem
 				{
 					chart.Remove(note);
 				}
+				if (note.time <= -30)
+				{
+					MissPenalty(dancePlayer, note.beatmap, 20);
+					chart.Remove(note);
+					continue;
+				}
 			}
 			bool successMismatch = false;
 			for (int column = 0; column < 4; column++)
@@ -287,15 +300,15 @@ public class RhythmHandler : ModSystem
 					successMismatch = true;
 				}
 			}
-			if (strum && successMismatch)
-			{
-				MissPenalty(dancePlayer);
+			//if (strum && successMismatch)
+			//{
+			//	MissPenalty(dancePlayer);
 				//for (int column = 0; column < 4; column++)
 				//{
 				//    Main.NewText(successfulColumns[0]);
 				//    Main.NewText(heldDown[0]);
 				//}
-			}
+			//}
 		}
 	}
 		//[Obsolete]
@@ -369,14 +382,17 @@ public class RhythmHandler : ModSystem
 			{
 				RhythmicProjectile rhythmistProjectile = Main.projectile[projIndex].ModProjectile as RhythmicProjectile;
 
+				// RS: IDK why this was for 4K specifically
+				// It really should both be 4K and GH
+
 				// Set projectile target
-				if (gameplayType == GameplayType.Note)
+				//if (gameplayType == GameplayType.Note)
+				//{
+				if (IsAutoAiming)
 				{
-					if (targeting)
-					{
-						rhythmistProjectile.targetNPCWhoAmI = targetWhoAmI;
-					}
+					rhythmistProjectile.targetNPCWhoAmI = autoAimTargetWhoAmI;
 				}
+				//}
 				rhythmistProjectile.targetPosition = targetPosition;
 
 				// Add effects to projectile based on accessories
@@ -427,7 +443,7 @@ public class RhythmHandler : ModSystem
 
 		//public void NoteHit(float accuracy = 0, LegacySoundStyle legacySoundStyle = null, float holdDamageMult = 1)
 
-        public void NoteHit(float accuracy = 0, SoundStyle? soundStyle = null, float holdDamageMult = 1)
+		public void NoteHit(float accuracy = 0, SoundStyle? soundStyle = null, float holdDamageMult = 1)
 		{
 			// The combo meter should still count here if there's an accessory that depends on it while the player is dead
 			RhythmicWeaponBase rhythmicWeaponBase = Main.LocalPlayer.HeldItem.ModItem as RhythmicWeaponBase;
@@ -545,7 +561,7 @@ public class RhythmHandler : ModSystem
 						calculatedKnockback,
 						localRhythmPlayer.comboMeter,
 						targetPosition,
-						targetWhoAmI
+						autoAimTargetWhoAmI
 					)
 				)
 				{
@@ -563,27 +579,27 @@ public class RhythmHandler : ModSystem
 					0f,
 					0f
 				);
-				// Give projectile information about target
-				if (Main.projectile[projIndex].ModProjectile is RhythmicProjectile)
-				{
-					RhythmicProjectile rhythmistProjectile = Main.projectile[projIndex].ModProjectile as RhythmicProjectile;
-					if (gameplayType == GameplayType.Note)
-					{
-						if (targeting)
-						{
-							rhythmistProjectile.targetNPCWhoAmI = targetWhoAmI;
-						}
-					}
-					rhythmistProjectile.targetPosition = targetPosition;
-					Main.projectile[projIndex].netUpdate2 = true;
-				}
+				//// Give projectile information about target
+				//if (Main.projectile[projIndex].ModProjectile is RhythmicProjectile)
+				//{
+				//	RhythmicProjectile rhythmistProjectile = Main.projectile[projIndex].ModProjectile as RhythmicProjectile;
+				//	if (gameplayType == GameplayType.Note)
+				//	{
+				//		if (lockedTarget)
+				//		{
+				//			rhythmistProjectile.targetNPCWhoAmI = targetWhoAmI;
+				//		}
+				//	}
+				//	rhythmistProjectile.targetPosition = targetPosition;
+				//	Main.projectile[projIndex].netUpdate2 = true;
+				//}
 
 				if (Main.netMode == NetmodeID.MultiplayerClient)
 				{
 					// TODO: Check if it works on multiplayer
 					// Send to server the animation and combo meter details to send to other clients
 					ModPlayerRhythmist dancePlayer = GetLocalRhythmPlayer();
-					ModNetHandler.GetPacketHandler<RhythmPlayerSyncComboBarHandler>().SendTarget(-1, Main.myPlayer, dancePlayer.comboDepletionRate, dancePlayer.comboMeter, dancePlayer.bodyFramePose, dancePlayer.poseAnimationTimer, dancePlayer.bodyDirectionPose);
+					ModNetHandler.GetPacketHandler<RhythmPlayerSyncComboBarHandler>().SendSyncAll(-1, Main.myPlayer, dancePlayer.comboDepletionRate, dancePlayer.comboMeter, dancePlayer.bodyFramePose, dancePlayer.poseAnimationTimer, dancePlayer.bodyDirectionPose);
 				}
 			}
 		}
@@ -611,9 +627,9 @@ public class RhythmHandler : ModSystem
 				heldDown = new bool[]
 				{
 						Keybinds.leftKey.Current,
-                        Keybinds.upKey.Current,
-                        Keybinds.downKey.Current,
-                        Keybinds.rightKey.Current,
+						Keybinds.upKey.Current,
+						Keybinds.downKey.Current,
+						Keybinds.rightKey.Current,
 				};
 			}
 			else if (gameplayType == GameplayType.Swipe)
@@ -707,20 +723,20 @@ public class RhythmHandler : ModSystem
 			for (int npcIndex = 0; npcIndex < sorted.Count(); npcIndex++)
 			{
 				NPC npc = sorted.ElementAt(npcIndex);
-				if (npc.whoAmI == targetWhoAmI)
+				if (npc.whoAmI == autoAimTargetWhoAmI)
 				{
 					foundEnemyInRange = true;
 					npcIndex += indexOffset; // Go up based on order from player
 					npcIndex += sorted.Count(); // Prevent it from going negative
 					npcIndex %= sorted.Count();
-					targetWhoAmI = sorted.ElementAt(npcIndex).whoAmI;
+					autoAimTargetWhoAmI = sorted.ElementAt(npcIndex).whoAmI;
 					break;
 				}
 			}
 			// If an enemy hasn't been selected yet
-			if (!foundEnemyInRange || targetWhoAmI == -1)
+			if (!foundEnemyInRange || autoAimTargetWhoAmI == -1)
 			{
-				targetWhoAmI = sorted.First().whoAmI;
+				autoAimTargetWhoAmI = sorted.First().whoAmI;
 			}
 			return true;
 		}
@@ -732,30 +748,31 @@ public class RhythmHandler : ModSystem
 		}
 		public IEnumerable<NPC> UpdateTargetPosition()
 		{
+			// RS: You love to see it
 			float closestDistance = 1000;
 
 			// Sort nearest NPCs
 			IEnumerable<NPC> sorted = GetNearestTargetableNPCs(closestDistance);
 			#region Dance target switch function
-			bool pressedRight = RhythmHandler.Instance.Keybinds.targetSwitchRight.JustPressed;
-			bool pressedLeft = RhythmHandler.Instance.Keybinds.targetSwitchLeft.JustPressed;
-			if ((pressedRight || pressedLeft) && Main.hasFocus)
+			bool pressedRight = Instance.Keybinds.targetSwitchRight.JustPressed;
+			bool pressedLeft = Instance.Keybinds.targetSwitchLeft.JustPressed;
+			if ((pressedRight || pressedLeft) && Main.hasFocus && IsAutoAiming)
 			{
 				int off = 0;
 				if (pressedLeft) off = -1;
 				if (pressedRight) off = 1;
 				SwitchTarget(off, sorted);
 			}
-			if (targetWhoAmI > -1 && !Main.npc[targetWhoAmI].active)
+			if (autoAimTargetWhoAmI > -1 && !Main.npc[autoAimTargetWhoAmI].active)
 			{
-				if (!SwitchTarget(Main.LocalPlayer.direction, sorted, true)) targetWhoAmI = -1; // Automatically switch
+				if (!SwitchTarget(Main.LocalPlayer.direction, sorted, true)) autoAimTargetWhoAmI = -1; // Automatically switch
 			}
 			#endregion
 			if (lockedTargetIndex > -1)
 			{
 				if (Main.npc[lockedTargetIndex].active)
 				{
-					targetWhoAmI = lockedTargetIndex;
+					autoAimTargetWhoAmI = lockedTargetIndex;
 				}
 				else
 				{
@@ -764,9 +781,9 @@ public class RhythmHandler : ModSystem
 			}
 			// Dance target switch code
 			// Target if targetIndex is valid
-			if (targetWhoAmI >= 0) // This makes sure that the cursor doesn't move much
+			if (IsAutoAiming && autoAimTargetWhoAmI >= 0) // This makes sure that the cursor doesn't move much
 			{
-				targetPosition = Main.npc[targetWhoAmI].Center;
+				targetPosition = Main.npc[autoAimTargetWhoAmI].Center;
 				crosshairRotation += 0.04f;
 			}
 			else

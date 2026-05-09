@@ -8,33 +8,29 @@ using Terraria.ModLoader;
 namespace EpicosityPort.Content.Items.Weapons.Melee.Flashlight
 {
     // RS: That's a lot just to replicate the rotation of the flashlight...
-    internal class FlashlightItemRotationPacketHandler : PacketHandler
+    internal class FlashlightPacketHandler : PacketHandler
     {
-        public const byte SyncTarget = 1;
-
-        public FlashlightItemRotationPacketHandler(byte handlerType) : base(handlerType)
-        {
-        }
+        public const byte SyncAll = 1;
 
         public override void HandlePacket(BinaryReader reader, int fromWho)
         {
             switch (reader.ReadByte())
             {
-                case (SyncTarget):
-                    ReceiveTarget(reader, fromWho);
+                case (SyncAll):
+                    ReceiveSyncAll(reader, fromWho);
                     break;
             }
         }
 
-        public void SendTarget(int toWho, int fromWho, float itemRotation, int playerDirection)
+        public void SendSyncAll(int toWho, int fromWho, float itemRotation, int playerDirection)
         {
-            ModPacket packet = GetPacket(SyncTarget, fromWho);
+            ModPacket packet = GetPacket(SyncAll, fromWho);
             packet.Write(itemRotation);
             packet.Write(playerDirection);
             packet.Send(toWho, fromWho);
         }
 
-        public void ReceiveTarget(BinaryReader reader, int fromWho)
+        public void ReceiveSyncAll(BinaryReader reader, int fromWho)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
@@ -44,7 +40,7 @@ namespace EpicosityPort.Content.Items.Weapons.Melee.Flashlight
             int playerDirection = reader.ReadInt32();
             if (Main.netMode == NetmodeID.Server)
             {
-                SendTarget(-1, fromWho, itemRotation, playerDirection);
+                SendSyncAll(-1, fromWho, itemRotation, playerDirection);
             }
             else
             {

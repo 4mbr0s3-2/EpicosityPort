@@ -1,10 +1,11 @@
 ﻿using EpicosityPort.Systems.Rhythm;
+using System;
 using Terraria;
 using Terraria.UI;
 
 namespace EpicosityPort.Systems.UserInterface.Rhythm
 {
-	public class RhythmInterface
+    public class RhythmInterface : IDisposable
 	{
 		public Terraria.UI.UserInterface RhythmUserInterface;
 		public RhythmUIState RhythmUIStateInstance;
@@ -13,7 +14,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		public string fourKeySkinName = "";
 		public void ShowDanceUI()
 		{
-			RhythmHandler.Instance.targetPosition = Main.MouseWorld;
+			//RhythmHandler.Instance.targetPosition = Main.MouseWorld;
 			RhythmUserInterface?.SetState(RhythmUIStateInstance);
 		}
 
@@ -21,5 +22,10 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		{
 			RhythmUserInterface?.SetState(null);
 		}
-	}
+
+        public void Dispose()
+        {
+            RhythmUIStateInstance.Dispose();
+        }
+    }
 }

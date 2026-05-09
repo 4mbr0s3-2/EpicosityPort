@@ -36,7 +36,7 @@ namespace EpicosityPort
         private static string noteToEveryone = "Most of the code in this mod is old and scuffed and should have had better implementations. Expect unnecessarily static fields, huge if-statement nests, and other terrible practices. --4mbr0s3 2";
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            ModNetHandler.HandlePacket(reader, whoAmI);
+            ModNetHandler.Instance.HandlePacket(reader, whoAmI);
         }
         //public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)/* tModPorter Note: Removed. Use ModSystem.ModifyInterfaceLayers */
         //{

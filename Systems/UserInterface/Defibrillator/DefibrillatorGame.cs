@@ -200,9 +200,10 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 				spriteBatch.Draw(defibrillatorRenderTarget, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
 				spriteBatch.End();
 
-				// For some reason this only works during drawing
-				// RS: I'm not even gonna question this
-				if (Main.mouseLeft && currentBeat >= 5 && currentBeat <= 7 && !lastPressedSpace && !hasHitForThisCycle)
+				bool pressedSpace = Main.mouseLeft;
+                // For some reason this only works during drawing
+                // RS: I'm not even gonna question this
+                if (pressedSpace && currentBeat >= 5 && currentBeat <= 7 && !lastPressedSpace && !hasHitForThisCycle)
 				{
 					hasHitForThisCycle = true;
 					double beatTime = 60d / bpm;
@@ -229,7 +230,7 @@ namespace EpicosityPort.Systems.UserInterface.Defibrillator
 						SoundEngine.PlaySound(SoundID.Item16);
 					}
 				}
-				lastPressedSpace = Main.mouseLeft;
+				lastPressedSpace = pressedSpace;
 				spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
 			}
 			public GameUIStateInstance()

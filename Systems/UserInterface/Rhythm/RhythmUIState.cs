@@ -15,7 +15,9 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 {
 	public class RhythmUIState : UIState, IDisposable
 	{
-		public SpriteScene receptors;
+		private IEnumerable<NPC> sortedTargetableNPCs;
+
+        public SpriteScene receptors;
 		public AccuracyDisplay currentAcc;
 		public JudgementCounter judgementCounter;
 
@@ -146,7 +148,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			{
 				// Draw fretboard
 
-				Texture2D fretboardTexture = ModContent.Request<Texture2D>($"EpicosityPort/Systems/UserInterface/Rhythm/Fretboards/{accessories.fretboardType}").Value;
+				Texture2D fretboardTexture = ModContent.Request<Texture2D>($"EpicosityPort/Systems/UserInterface/Rhythm/Fretboards/{accessories.fretboardType}", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
 				basicEffect.Texture = fretboardTexture;
 				basicEffect.TextureEnabled = true;
@@ -221,7 +223,6 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			}
 			#endregion
 			#region Draw charted notes
-			// RS: Programming to an interface! Wow
 			IOrderedEnumerable<ISprite> chartOrderedByTime = Instance.chart.sprites.OrderByDescending((note) => (note as RhythmNote).time);
 			foreach (RhythmNote note in chartOrderedByTime)
 			{
@@ -342,6 +343,16 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			Main.graphics.GraphicsDevice.SetRenderTarget(null);
 			//return renderTarget2D;
 		}
+		private void LoadAssets()
+		{
+            texPlayfieldArrow = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/Note", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            ArrowOutlineTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ArrowOutline", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            CrosshairTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Crosshair", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            CenterTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Center", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            GuitarHeroNoteTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/Notes", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            GuitarHeroReceptorTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/ControlNotes", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            GuitarHeroFireTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/HitFlame", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+        }
 		public RhythmUIState()
 		{
 			Main.OnPreDraw += PreRender;
@@ -352,13 +363,18 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 					fKRenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 300, 400);
 				}
 			);
+
+			LoadAssets();
         }
 		public void Dispose()
 		{
 			Main.OnPreDraw -= PreRender;
 
-			guitarHeroRenderTarget.Dispose();
-			fKRenderTarget.Dispose();
+			Main.RunOnMainThread(() =>
+			{
+				guitarHeroRenderTarget.Dispose();
+				fKRenderTarget.Dispose();
+			});
 		}
 
 		public override void OnInitialize()
@@ -395,16 +411,6 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			//GuitarHeroNoteTexture = ModContent.GetTexture("Epicosity/UI/Rhythm/NoteSkins/GuitarHero/Notes");
 			//GuitarHeroReceptorTexture = ModContent.GetTexture("Epicosity/UI/Rhythm/NoteSkins/GuitarHero/ControlNotes");
 			//GuitarHeroFireTexture = ModContent.GetTexture("Epicosity/UI/Rhythm/NoteSkins/GuitarHero/HitFlame");
-
-			// RS: JANK I KNOW
-			// But this mod was always jank in the first place
-			texPlayfieldArrow = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/Note", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            ArrowOutlineTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ArrowOutline", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            CrosshairTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Crosshair", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            CenterTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/Center", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            GuitarHeroNoteTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/Notes", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            GuitarHeroReceptorTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/ControlNotes", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            GuitarHeroFireTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/NoteSkins/GuitarHero/HitFlame", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
             Instance.heldDown = new bool[]
 			{
@@ -447,6 +453,9 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		}
 		public override void Update(GameTime gameTime)
 		{
+			// TODO RS: Move this to a better place lol
+            sortedTargetableNPCs = Instance.UpdateTargetPosition();
+            
 			receptors.Update(gameTime);
 			texPlayfieldArrow = ModContent.Request<Texture2D>($"EpicosityPort/Systems/UserInterface/Rhythm/NoteSkins/Note{RhythmHandler.Instance.Interface.fourKeySkinName}").Value;
 			Instance.UpdateRhythmGameplay(gameTime);
@@ -484,17 +493,14 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		{
 			Terraria.GameInput.PlayerInput.SetZoom_MouseInWorld();
 			#region Targeting code
-			if (!Instance.targeting)
-			{	
-				Instance.targetPosition = Main.MouseWorld;
-				Instance.crosshairRotation = 0;
-			}
-			else
+			if (Instance.IsAutoAiming)
 			{
-				IEnumerable<NPC> sorted = Instance.UpdateTargetPosition();
-				for (int npcIndex = 0; npcIndex < sorted.Count(); npcIndex++)
+				// RS: YIKES
+				// I'm "fixing" this
+				//IEnumerable<NPC> sorted = Instance.UpdateTargetPosition();
+				for (int npcIndex = 0; npcIndex < sortedTargetableNPCs.Count(); npcIndex++)
 				{
-					NPC npc = sorted.ElementAt(npcIndex);
+					NPC npc = sortedTargetableNPCs.ElementAt(npcIndex);
 					string text = npcIndex.ToString();
 					Vector2 origin = FontAssets.MouseText.Value.MeasureString(text) / 2f;
 					Vector2 halfScreen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
@@ -502,7 +508,8 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 						spriteBatch,
 						FontAssets.MouseText.Value,
 						text,
-						((npc.Center - Main.screenPosition) - halfScreen) * Main.GameViewMatrix.Zoom.X + halfScreen,
+						//((npc.Center - Main.screenPosition) - halfScreen) * Main.GameViewMatrix.Zoom.X + halfScreen,
+						Vector2.Transform(npc.Center, Main.UIScaleMatrix),
 						Color.White,
 						0,
 						origin,
@@ -566,47 +573,48 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		}
 		public void DrawNoteGuitarHeroStyle(SpriteBatch spriteBatch)
 		{
-			if (guitarHeroRenderTarget != null)
-			{
-				Vector2 ArrowRowLocation = CalculatePlayfieldLocation() + new Vector2(60, -35) - new Vector2(100, 100);
+			//if (guitarHeroRenderTarget != null)
+			//{
+			if (guitarHeroRenderTarget is null) return;
+			Vector2 ArrowRowLocation = CalculatePlayfieldLocation() + new Vector2(60, -35) - new Vector2(100, 100);
 
-				for (int i = 0; i < 5; i++)
-				{
-					spriteBatch.Draw(
-						guitarHeroRenderTarget,
-						//new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2 - 100, 200, 200),
-						new Rectangle((int)ArrowRowLocation.X - (int)Main.screenPosition.X, (int)ArrowRowLocation.Y - (int)Main.screenPosition.Y + i, 200, 1),
-						new Rectangle(0, 2 * i, 400, 2),
-						Color.White * (i / 5f),
-						0,
-						Vector2.Zero,
-						SpriteEffects.None,
-						0);
-				}
+			for (int i = 0; i < 5; i++)
+			{
 				spriteBatch.Draw(
 					guitarHeroRenderTarget,
 					//new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2 - 100, 200, 200),
-					new Rectangle((int)ArrowRowLocation.X - (int)Main.screenPosition.X, (int)ArrowRowLocation.Y - (int)Main.screenPosition.Y + 5, 200, 185),
-					new Rectangle(0, 10, 400, 370),
-					Color.White,
+					new Rectangle((int)ArrowRowLocation.X - (int)Main.screenPosition.X, (int)ArrowRowLocation.Y - (int)Main.screenPosition.Y + i, 200, 1),
+					new Rectangle(0, 2 * i, 400, 2),
+					Color.White * (i / 5f),
 					0,
 					Vector2.Zero,
 					SpriteEffects.None,
 					0);
-				for (int i = 0; i < 10; i++)
-				{
-					spriteBatch.Draw(
-						guitarHeroRenderTarget,
-						//new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2 - 100, 200, 200),
-						new Rectangle((int)ArrowRowLocation.X - (int)Main.screenPosition.X, (int)ArrowRowLocation.Y - (int)Main.screenPosition.Y + i + 190, 200, 1),
-						new Rectangle(0, 380 + 2 * i, 400, 2),
-						Color.White * (1 - (i / 10f)),
-						0,
-						Vector2.Zero,
-						SpriteEffects.None,
-						0);
-				}
 			}
+			spriteBatch.Draw(
+				guitarHeroRenderTarget,
+				//new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2 - 100, 200, 200),
+				new Rectangle((int)ArrowRowLocation.X - (int)Main.screenPosition.X, (int)ArrowRowLocation.Y - (int)Main.screenPosition.Y + 5, 200, 185),
+				new Rectangle(0, 10, 400, 370),
+				Color.White,
+				0,
+				Vector2.Zero,
+				SpriteEffects.None,
+				0);
+			for (int i = 0; i < 10; i++)
+			{
+				spriteBatch.Draw(
+					guitarHeroRenderTarget,
+					//new Rectangle(Main.screenWidth / 2, Main.screenHeight / 2 - 100, 200, 200),
+					new Rectangle((int)ArrowRowLocation.X - (int)Main.screenPosition.X, (int)ArrowRowLocation.Y - (int)Main.screenPosition.Y + i + 190, 200, 1),
+					new Rectangle(0, 380 + 2 * i, 400, 2),
+					Color.White * (1 - (i / 10f)),
+					0,
+					Vector2.Zero,
+					SpriteEffects.None,
+					0);
+			}
+			//}
 		}
 		public void DrawNote4KStyle(SpriteBatch spriteBatch)
 		{

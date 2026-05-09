@@ -46,7 +46,7 @@ namespace EpicosityPort.Utilities
         {
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                ModNetHandler.GetPacketHandler<SoundClientHandler>().SendTarget(-1, Main.myPlayer, soundStyle, pos);
+                ModNetHandler.GetPacketHandler<SoundClientHandler>().SendSound(-1, Main.myPlayer, soundStyle, pos);
             }
             return SoundEngine.PlaySound(soundStyle, pos);
         }
@@ -98,22 +98,16 @@ namespace EpicosityPort.Utilities
 		}
 		internal class SoundClientHandler : PacketHandler
 		{
-			public const byte SyncTarget = 1;
-			public SoundClientHandler(byte handlerType) : base(handlerType)
-			{
-			}
+			// RS: Lmao I really copy-pasted from that wiki
+			//public const byte SyncTarget = 1;
 			public override void HandlePacket(BinaryReader reader, int fromWho)
 			{
-				switch (reader.ReadByte())
-				{
-					case (SyncTarget):
-						ReceiveTarget(reader, fromWho);
-						break;
-				}
+				reader.ReadByte();
+				ReceiveSound(reader, fromWho);
 			}
-			public void SendTarget(int toWho, int fromWho, SoundStyle soundStyle, Vector2? pos)
+			public void SendSound(int toWho, int fromWho, SoundStyle soundStyle, Vector2? pos)
 			{
-				ModPacket packet = GetPacket(SyncTarget, fromWho);
+				ModPacket packet = GetPacket(0, fromWho);
 				packet.Write(soundStyle.SoundPath);
                 packet.Write(soundStyle.Volume);
                 packet.Write(soundStyle.Pitch);
@@ -121,10 +115,9 @@ namespace EpicosityPort.Utilities
 				if (pos != null)
 					packet.WriteVector2((Vector2)pos);
 				packet.Send(toWho, fromWho);
-				//Main.NewText($"Sent request to play SoundId {type} from {fromWho} to {toWho}");
 			}
 
-			public void ReceiveTarget(BinaryReader reader, int fromWho)
+			public void ReceiveSound(BinaryReader reader, int fromWho)
 			{
 				if (Main.netMode == NetmodeID.MultiplayerClient)
 				{
@@ -145,7 +138,7 @@ namespace EpicosityPort.Utilities
 				//Main.NewText($"Received request to play SoundId {type} from {fromWho}");
 				if (Main.netMode == NetmodeID.Server)
 				{
-					SendTarget(-1, fromWho, new SoundStyle(soundPath) { Pitch = pitch, Volume = volume }, pos);
+					SendSound(-1, fromWho, new SoundStyle(soundPath) { Pitch = pitch, Volume = volume }, pos);
 				}
 				else
 				{

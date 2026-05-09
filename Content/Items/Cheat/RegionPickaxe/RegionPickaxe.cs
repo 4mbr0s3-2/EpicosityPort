@@ -2,12 +2,15 @@
 using EpicosityPort.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Achievements;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Default;
+using Terraria.ModLoader.IO;
 using Terraria.UI;
 using static EpicosityPort.Content.Items.Cheat.RegionPickaxe.RegionPickaxe;
 
@@ -15,7 +18,7 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 {
 	public class RegionPickaxe : SpecialItem
 	{
-        public override string Texture => $"Terraria/Images/Item_{ItemID.TinPickaxe}";
+		public override string Texture => $"Terraria/Images/Item_{ItemID.TinPickaxe}";
 		public static RegionPickaxe GetLocalRegionPickaxe()
 		{
 			if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<RegionPickaxe>())
@@ -46,11 +49,49 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 
 			return new int[4] { minTileCursorX, maxTileCursorX, minTileCursorY, maxTileCursorY };
 		}
-
+		// RS: Yeah I'm (almost) not touching this
 		public class SpecialItemUIState : UIState
 		{
+			private string param;
+			private string paramValue;
+			private bool isHovering = false;
+			public override void Update(GameTime gameTime)
+			{
+				Main.LocalPlayer.cursorItemIconEnabled = isHovering;
+				Main.LocalPlayer.cursorItemIconText = $"{param}: {paramValue}";
+				Main.LocalPlayer.cursorItemIconID = -1;
+			}
+			private Asset<Texture2D>[] shapeButtonTextures;
+            private Asset<Texture2D>[] bypassButtonTextures;
+            private Asset<Texture2D>[] filterButtonTextures;
+            private	Asset<Texture2D>[] inversionButtonTextures;
+            public override void OnInitialize()
+            {
+				shapeButtonTextures = new Asset<Texture2D>[Enum.GetNames<PickaxeShape>().Length];
+				bypassButtonTextures = new Asset<Texture2D>[Enum.GetNames<PickaxeBypass>().Length];
+				filterButtonTextures = new Asset<Texture2D>[Enum.GetNames<PickaxeFilter>().Length];
+				inversionButtonTextures = new Asset<Texture2D>[Enum.GetNames<PickaxeSelectionInversion>().Length];
+
+				for (int i = 1; i <= Enum.GetNames<PickaxeShape>().Length; i++)
+				{
+					shapeButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ShapeButton{i}");
+				}
+                for (int i = 1; i <= Enum.GetNames<PickaxeBypass>().Length; i++)
+				{
+                    bypassButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/BypassButton{i}");
+				}
+                for (int i = 1; i <= Enum.GetNames<PickaxeFilter>().Length; i++)
+                {
+					filterButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/FilterButton{i}");
+                }
+                for (int i = 1; i <= Enum.GetNames<PickaxeSelectionInversion>().Length; i++)
+                {
+					inversionButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InversionButton{i}");
+                }
+            }
 			protected override void DrawSelf(SpriteBatch spriteBatch)
 			{
+				isHovering = false;
 				ModPlayerRegionPickaxeUI regionPickaxeUIPlayer = Main.LocalPlayer.GetModPlayer<ModPlayerRegionPickaxeUI>();
 				RegionPickaxe regionPickaxe = GetLocalRegionPickaxe();
 				if (regionPickaxe == null)
@@ -60,10 +101,11 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 				#region Draw and process region pickaxe buttons
 				if (regionPickaxeUIPlayer.guiAnimationProgress > 0)
 				{
-					Texture2D shapeButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ShapeButton" + ((int)regionPickaxe.pickaxeShape + 1)).Value;
-					Texture2D bypassButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/BypassButton" + ((int)regionPickaxe.pickaxeBypass + 1)).Value;
-					Texture2D filterButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/FilterButton" + ((int)regionPickaxe.pickaxeFilter + 1)).Value;
-					Texture2D inversionButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InversionButton" + ((int)regionPickaxe.pickaxeSelectionInversion + 1)).Value;
+					//Texture2D shapeButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ShapeButton" + ((int)regionPickaxe.pickaxeShape + 1)).Value;
+					//Texture2D bypassButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/BypassButton" + ((int)regionPickaxe.pickaxeBypass + 1)).Value;
+					//Texture2D filterButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/FilterButton" + ((int)regionPickaxe.pickaxeFilter + 1)).Value;
+					//Texture2D inversionButtonTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InversionButton" + ((int)regionPickaxe.pickaxeSelectionInversion + 1)).Value;
+					// RS: Wow, so much for localization
 					string shapeString = EnumHelper.GetEnumValueNameAndSplitCamelCase(regionPickaxe.pickaxeShape);
 					string bypassString = EnumHelper.GetEnumValueNameAndSplitCamelCase(regionPickaxe.pickaxeBypass);
 					string filterString = EnumHelper.GetEnumValueNameAndSplitCamelCase(regionPickaxe.pickaxeFilter);
@@ -74,36 +116,36 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 					{
 						Vector2 buttonOffset = new Vector2(50 * ease, 0);
 						buttonOffset = buttonOffset.RotatedBy((1f - ease) + (MathHelper.TwoPi / 4f) * buttonIndex);
-						Rectangle currentButtonRectangle = new Rectangle((int)(regionPickaxeUIPlayer.menuScreenPosition.X + buttonOffset.X), (int)(regionPickaxeUIPlayer.menuScreenPosition.Y + buttonOffset.Y), 40, 40);
-						Texture2D buttonTexture;
+						Vector2 menuScreenPosition = Vector2.Transform(regionPickaxeUIPlayer.menuScreenPosition, Matrix.Invert(Main.UIScaleMatrix));
+						
+                        Rectangle currentButtonRectangle = new Rectangle((int)(menuScreenPosition.X + buttonOffset.X), (int)(menuScreenPosition.Y + buttonOffset.Y), 40, 40);
+						Texture2D buttonTexture = null;
 						switch (buttonIndex)
 						{
 							case 0:
-								buttonTexture = shapeButtonTexture;
+								buttonTexture = shapeButtonTextures[(int)regionPickaxe.pickaxeShape].Value;
 								break;
 							case 1:
-								buttonTexture = bypassButtonTexture;
+								buttonTexture = bypassButtonTextures[(int)regionPickaxe.pickaxeBypass].Value;
 								break;
 							case 2:
-								buttonTexture = filterButtonTexture;
+								buttonTexture = filterButtonTextures[(int)regionPickaxe.pickaxeFilter].Value;
 								break;
 							case 3:
-								buttonTexture = inversionButtonTexture;
+								buttonTexture = inversionButtonTextures[(int)regionPickaxe.pickaxeSelectionInversion].Value;
 								break;
-							default:
-								buttonTexture = shapeButtonTexture;
-								break;
+							//default:
+							//	buttonTexture = shapeButtonTextures[(int)regionPickaxe.pickaxeShape].Value; // RS: ???
+							//	break;
 						}
 						#region Draw buttons
 						if (currentButtonRectangle.Contains((Main.MouseScreen + new Vector2(20, 20)).ToPoint()))
 						{
-							Main.LocalPlayer.mouseInterface = true;
+							isHovering = true;
+							//Main.LocalPlayer.mouseInterface = true;
 							currentButtonRectangle.Width += 5;
 							currentButtonRectangle.Height += 5;
-							Main.LocalPlayer.cursorItemIconEnabled = true;
-							Main.LocalPlayer.cursorItemIconID = -1;
 							// param is the name of the parameter that will be used for tooltip text
-							string param;
 							switch (buttonIndex)
 							{
 								case 0:
@@ -122,7 +164,6 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 									param = "???";
 									break;
 							}
-							string paramValue;
 							switch (buttonIndex)
 							{
 								case 0:
@@ -141,7 +182,7 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 									paramValue = "???";
 									break;
 							}
-							Main.LocalPlayer.cursorItemIconText = $"{param}: {paramValue}";
+							//Main.LocalPlayer.cursorItemIconText = $"{param}: {paramValue}";
 							if (regionPickaxeUIPlayer.guiAnimationProgress >= 1)
 							{
 								if (Main.mouseLeft && Main.mouseLeftRelease)
@@ -441,26 +482,74 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 			}
 			else if (pickaxeFilter == PickaxeFilter.PinkTilesOnly)
 			{
-				ushort num = (ushort)ModLoader.GetMod("ModLoader").Find<ModTile>("MysteryTile").Type;
-				Tile tile = Framing.GetTileSafely(x, y);
-				bool flag = tile.TileType != num || !tile.HasTile;
-				if (!flag)
-				{
-					if (pickaxeBypass == PickaxeBypass.Pickaxe)
-					{
-						if (pickaxePower >= 0) Main.LocalPlayer.PickTile(x, y, pickaxePower);
-						else { WorldGen.SquareTileFrame(x, y); }
-					}
-					else if (pickaxeBypass == PickaxeBypass.WorldGen)
-					{
-						WorldGen.KillTile(x, y, false, false, false);
-					}
-					else if (pickaxeBypass == PickaxeBypass.BlackHole)
-					{
-                        Tile t = Main.tile[x, y];
+                // RS: tModLoader changed the way unloaded stuff works
+				// It WOULD be useful to use VanillaFallbackOnModDeletion as a feature but... this is a pickaxe
+                Tile t = Main.tile[x, y];
+                ModTile modTile = ModContent.GetModTile(t.TileType);
+                bool unloadedTile = modTile is UnloadedTile;
+                if (t.HasTile && unloadedTile)
+                {
+                    //ushort type = TileIO.Tiles.unloadedEntryLookup.Lookup(i, j);
+                    //var info = TileIO.Tiles.entries[type];
+                    //if (modName == null || info.modName.Equals(modName, StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //    string key = $"{info.modName}/{info.name}";
+                    //    purgedTiles.TryGetValue(key, out var currentCount);
+                    //    purgedTiles[key] = currentCount + 1;
+                    //    if (actuallyPurge)
+                    //    {
+                    //        t.TileType = info.vanillaReplacementType;
+                    //    }
+                    
+                    if (pickaxeBypass == PickaxeBypass.Pickaxe)
+                    {
+                        if (pickaxePower >= 0) Main.LocalPlayer.PickTile(x, y, pickaxePower);
+                        else { WorldGen.SquareTileFrame(x, y); }
+                    }
+                    else if (pickaxeBypass == PickaxeBypass.WorldGen)
+                    {
+                        WorldGen.KillTile(x, y, false, false, false);
+                    }
+                    else if (pickaxeBypass == PickaxeBypass.BlackHole)
+                    {
                         t.HasTile = false;
                     }
-				}
+                }
+                var unloadedWallType = ModContent.WallType<UnloadedWall>();
+				if (t.WallType == unloadedWallType)
+				{
+                    if (pickaxeBypass == PickaxeBypass.Pickaxe || pickaxeBypass == PickaxeBypass.WorldGen)
+                    {
+                        WorldGen.KillWall(x, y);
+                    }
+                    else if (pickaxeBypass == PickaxeBypass.BlackHole)
+                    {
+                        Main.tile[x, y].WallType = WallID.None;
+                    }
+                }
+                //bool success = ModLoader.GetMod("ModLoader").TryFind<ModTile>("MysteryTile");
+                //if (!success) return;
+
+                //            ushort num = (ushort)ModLoader.GetMod("ModLoader").Find<ModTile>("MysteryTile").Type;
+                //Tile tile = Framing.GetTileSafely(x, y);
+                //bool flag = tile.TileType != num || !tile.HasTile;
+                //if (!flag)
+                //{
+    //            	if (pickaxeBypass == PickaxeBypass.Pickaxe)
+				//{
+				//	if (pickaxePower >= 0) Main.LocalPlayer.PickTile(x, y, pickaxePower);
+				//	else { WorldGen.SquareTileFrame(x, y); }
+				//}
+				//else if (pickaxeBypass == PickaxeBypass.WorldGen)
+				//{
+				//	WorldGen.KillTile(x, y, false, false, false);
+				//}
+				//else if (pickaxeBypass == PickaxeBypass.BlackHole)
+				//{
+				//	Tile t = Main.tile[x, y];
+				//	t.HasTile = false;
+				//}
+				//}
 			}
 			if (pickaxeFilter == PickaxeFilter.WallsOnly || pickaxeFilter == PickaxeFilter.Everything || pickaxeFilter == PickaxeFilter.TilesAndWalls)
 			{
@@ -470,7 +559,7 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 				}
 				else if (pickaxeBypass == PickaxeBypass.BlackHole)
 				{
-					Main.tile[x, y].WallType = 0;
+                    Main.tile[x, y].WallType = WallID.None;
 				}
 			}
 			if (pickaxeFilter == PickaxeFilter.LiquidsOnly || pickaxeFilter == PickaxeFilter.Everything)
@@ -595,9 +684,9 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 
 					if (regionPickaxe.pickaxeBypass != PickaxeBypass.Pickaxe) // If black hole bypass or world gen bypass, update world for rest of players
 					{
-                        //NetMessage.SendTileRange(Main.myPlayer, minTileX - 1, minTileY - 1, Math.Abs(maxTileX - minTileX) + 1, Math.Abs(maxTileY - minTileY) + 1);
-                        NetMessage.SendTileSquare(Main.myPlayer, minTileX - 1, minTileY - 1, Math.Abs(maxTileX - minTileX) + 1, Math.Abs(maxTileY - minTileY) + 1);
-                    }
+						//NetMessage.SendTileRange(Main.myPlayer, minTileX - 1, minTileY - 1, Math.Abs(maxTileX - minTileX) + 1, Math.Abs(maxTileY - minTileY) + 1);
+						NetMessage.SendTileSquare(Main.myPlayer, minTileX - 1, minTileY - 1, Math.Abs(maxTileX - minTileX) + 1, Math.Abs(maxTileY - minTileY) + 1);
+					}
 
 					regionPickaxeUIPlayer.cursor1Position = null;
 					regionPickaxeUIPlayer.cursor2Position = null;

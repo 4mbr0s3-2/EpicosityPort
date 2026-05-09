@@ -16,23 +16,19 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
         public List<Item> choreabilitySlotsInventory = new List<Item>();
         internal class ChoreabilitySlotsSyncHandler : PacketHandler
         {
-            public const byte SyncTarget = 1;
-
-            public ChoreabilitySlotsSyncHandler(byte handlerType) : base(handlerType)
-            {
-            }
+            public const byte SyncAllSlots = 1;
 
             public override void HandlePacket(BinaryReader reader, int fromWho)
             {
                 switch (reader.ReadByte())
                 {
-                    case (SyncTarget):
-                        ReceiveTarget(reader, fromWho);
+                    case (SyncAllSlots):
+                        ReceiveSlots(reader, fromWho);
                         break;
                 }
             }
 
-            public void SendTarget
+            public void SendSlots
             (
                 int toWho,
                 int fromWho,
@@ -49,7 +45,7 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
                 //packet.Send(toWho, fromWho);
             }
 
-            public void ReceiveTarget(BinaryReader reader, int fromWho)
+            public void ReceiveSlots(BinaryReader reader, int fromWho)
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
@@ -116,7 +112,7 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
             if (inequal)
             {
                 Main.NewText($"Syncing {Player.whoAmI}'s changed choreability slots!");
-                ModNetHandler.GetPacketHandler<ChoreabilitySlotsSyncHandler>().SendTarget(-1, Player.whoAmI, choreabilitySlotsInventory);
+                ModNetHandler.GetPacketHandler<ChoreabilitySlotsSyncHandler>().SendSlots(-1, Player.whoAmI, choreabilitySlotsInventory);
             }
         }
         public override void SaveData(TagCompound tag)/* tModPorter Suggestion: Edit tag parameter instead of returning new TagCompound */

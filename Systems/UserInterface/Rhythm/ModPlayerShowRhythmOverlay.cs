@@ -84,7 +84,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 
 					// Sync up combo meter and noteRate
 					if (Main.netMode == NetmodeID.MultiplayerClient)
-						ModNetHandler.GetPacketHandler<RhythmPlayerSyncComboBarHandler>().SendTarget(-1, Main.myPlayer, dancePlayer.comboDepletionRate, dancePlayer.comboMeter, dancePlayer.bodyFramePose, dancePlayer.poseAnimationTimer, dancePlayer.bodyDirectionPose);
+						ModNetHandler.GetPacketHandler<RhythmPlayerSyncComboBarHandler>().SendSyncAll(-1, Main.myPlayer, dancePlayer.comboDepletionRate, dancePlayer.comboMeter, dancePlayer.bodyFramePose, dancePlayer.poseAnimationTimer, dancePlayer.bodyDirectionPose);
 
 					// Set to HeldItem for one-shot
 					lastRhythmItemHeldType = Main.LocalPlayer.HeldItem.type;

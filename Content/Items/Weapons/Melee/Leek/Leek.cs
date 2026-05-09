@@ -10,11 +10,11 @@ namespace EpicosityPort.Content.Items.Weapons.Melee.Leek
         public class SpinningLeek : ModProjectile
         {
             public override string Texture => typeof(Leek).GetQualifiedNameAsPath();
-            public override void AutoStaticDefaults()
-            {
-                //TextureAssets.Projectile[Projectile.type].Value = ModContent.GetTexture("Epicosity/Items/Weapons/Melee/Leek");
-                Main.projFrames[Projectile.type] = 1;
-            }
+            //public override void AutoStaticDefaults()
+            //{
+            //    //TextureAssets.Projectile[Projectile.type].Value = ModContent.GetTexture("Epicosity/Items/Weapons/Melee/Leek");
+            //    Main.projFrames[Projectile.type] = 1;
+            //}
             public override void SetDefaults()
             {
                 Projectile.width = 32;

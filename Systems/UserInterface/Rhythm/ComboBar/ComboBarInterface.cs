@@ -10,7 +10,6 @@ using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using System;
 using EpicosityPort.Systems.Rhythm;
-using EpicosityPort;
 using EpicosityPort.Utilities;
 using EpicosityPort.Systems.UserInterface.ChoreabilitySlots;
 using EpicosityPort.Effects.Shaders.Screen;
@@ -40,25 +39,25 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.ComboBar
 			private float showAnimation = 0;
 			
 			public Texture2D ComboBarJuice;
-            public Texture2D ComboBarBG;
-            public Texture2D ComboBarArrow;
+			public Texture2D ComboBarBG;
+			public Texture2D ComboBarArrow;
 			
 			public override void OnInitialize()
 			{
 				accuracyMarkers.Clear();
-				ComboBarJuice = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/ComboBar/ComboBarJuice").Value;
-				ComboBarBG = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/ComboBar/ComboBarBG").Value;
-				ComboBarArrow = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/ComboBar/ComboBarArrow").Value;
+				ComboBarJuice = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/ComboBar/ComboBarJuice", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				ComboBarBG = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/ComboBar/ComboBarBG", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				ComboBarArrow = ModContent.Request<Texture2D>("EpicosityPort/Systems/UserInterface/Rhythm/ComboBar/ComboBarArrow", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 			}
 			protected override void DrawSelf(SpriteBatch spriteBatch)
 			{
 				base.DrawSelf(spriteBatch);
 				float comboMeter = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmist>().comboMeter;
 				Vector2 barSize = new Vector2(186, 32);
-                int shake = (int)ComboBarInterface.Instance.shake;
+				int shake = (int)ComboBarInterface.Instance.shake;
 				float fullComboAnimation = ComboBarInterface.Instance.fullComboAnimation;
-                float arrowScale = ComboBarInterface.Instance.arrowScale;
-                Vector2 shakeOffset = new Vector2(Main.rand.Next(-shake, shake), Main.rand.Next(-shake, shake));
+				float arrowScale = ComboBarInterface.Instance.arrowScale;
+				Vector2 shakeOffset = new Vector2(Main.rand.Next(-shake, shake), Main.rand.Next(-shake, shake));
 				Vector2 barPosition = new Vector2(Main.screenWidth / 2f - barSize.X / 2f, (-1.1f + 2 * Easings.EaseInOutCubic(showAnimation)) * barSize.Y) + shakeOffset;
 				#region Draw choreabilities
 				ChoreabilitySlotsPlayer choreabilityPlayer = Main.LocalPlayer.GetModPlayer<ChoreabilitySlotsPlayer>();
@@ -217,14 +216,14 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.ComboBar
 				// RS: Crazy how these are all outside of the actual UIState subclass
 				// Cheap way of making an ease out animation
 				Instance.arrowScale *= 0.9f;
-                Instance.shake *= 0.9f;
-                Instance.fullComboAnimation *= 0.9f;
-                Instance.shouldShowComboBar = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmist>().comboMeter > 0;
+				Instance.shake *= 0.9f;
+				Instance.fullComboAnimation *= 0.9f;
+				Instance.shouldShowComboBar = Main.LocalPlayer.GetModPlayer<ModPlayerRhythmist>().comboMeter > 0;
 				//Main.NewText(shouldShowComboBar);
 				float constantRate = 1f / 30f;
 				if (Instance.holdComboBarTimer > 0)
 				{
-                    Instance.holdComboBarTimer--;
+					Instance.holdComboBarTimer--;
 				}
 				if (Instance.shouldShowComboBar || Instance.holdComboBarTimer > 0)
 				{

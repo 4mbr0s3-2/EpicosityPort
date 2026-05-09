@@ -1,7 +1,5 @@
-﻿using EpicosityPort.Systems.Network;
-using EpicosityPort.Systems.UserInterface.Rhythm;
+﻿using EpicosityPort.Systems.UserInterface.Rhythm;
 using EpicosityPort.Utilities;
-using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -10,70 +8,6 @@ namespace EpicosityPort.Systems.Rhythm
 {
 	public class ModPlayerRhythmist : ModPlayer
 	{
-		internal class RhythmPlayerSyncComboBarHandler : PacketHandler
-		{
-			public const byte SyncTarget = 1;
-
-			public RhythmPlayerSyncComboBarHandler(byte handlerType) : base(handlerType)
-			{
-			}
-
-			public override void HandlePacket(BinaryReader reader, int fromWho)
-			{
-				switch (reader.ReadByte())
-				{
-					case (SyncTarget):
-						ReceiveTarget(reader, fromWho);
-						break;
-				}
-			}
-
-			public void SendTarget
-			(
-				int toWho,
-				int fromWho,
-				float comboDepletionRate,
-				float comboMeter,
-				int bodyFramePose,
-				int poseAnimationTimer,
-				int bodyDirectionPose
-			)
-			{
-				ModPacket packet = GetPacket(SyncTarget, fromWho);
-				packet.Write(comboDepletionRate);
-				packet.Write(comboMeter);
-				packet.Write(bodyFramePose);
-				packet.Write(poseAnimationTimer);
-				packet.Write(bodyDirectionPose);
-				packet.Send(toWho, fromWho);
-			}
-
-			public void ReceiveTarget(BinaryReader reader, int fromWho)
-			{
-				if (Main.netMode == NetmodeID.MultiplayerClient)
-				{
-					fromWho = reader.ReadByte(); // fromWho sent from server
-				}
-				float comboDepletionRate = reader.ReadSingle();
-				float comboMeter = reader.ReadSingle();
-				int bodyFramePose = reader.ReadInt32();
-				int poseAnimationTimer = reader.ReadInt32();
-				int bodyDirectionPose = reader.ReadInt32();
-				if (Main.netMode == NetmodeID.Server)
-				{
-					SendTarget(-1, fromWho, comboDepletionRate, comboMeter, bodyFramePose, poseAnimationTimer, bodyDirectionPose);
-				}
-				else
-				{
-					ModPlayerRhythmist dancePlayer = Main.player[fromWho].GetModPlayer<ModPlayerRhythmist>();
-					dancePlayer.comboDepletionRate = comboDepletionRate;
-					dancePlayer.comboMeter = comboMeter;
-					dancePlayer.bodyFramePose = bodyFramePose;
-					dancePlayer.poseAnimationTimer = poseAnimationTimer;
-					dancePlayer.bodyDirectionPose = bodyDirectionPose;
-				}
-			}
-		}
 		/// <summary>The value removed from each arrow's time every tick.</summary>
 		public double trackSpeed = 0.5;
 
@@ -100,18 +34,19 @@ namespace EpicosityPort.Systems.Rhythm
 				}
 				if (Main.LocalPlayer.HeldItem.GetGlobalItem<RhythmicItemInfo>().rhythmic && Main.mouseRight && !RhythmHandler.Instance.lastMouseRight && !Main.LocalPlayer.mouseInterface)
 				{
-                    // Toggle targeting
-                    RhythmHandler.Instance.targeting = !RhythmHandler.Instance.targeting;
-					bool hasLocked = false;
+					// Toggle targeting
+					//RhythmHandler.Instance.lockedTarget = !RhythmHandler.Instance.lockedTarget;
+					RhythmHandler.Instance.autoAiming = !RhythmHandler.Instance.autoAiming;
+                    bool hasLocked = false;
 					if (RhythmHandler.Instance.toggleDoubleTapCooldown > 0)
 					{
 						hasLocked = true;
-                        RhythmHandler.Instance.LockTarget(RhythmHandler.Instance.targetWhoAmI);
+                        RhythmHandler.Instance.LockTarget(RhythmHandler.Instance.autoAimTargetWhoAmI);
 					}
                     RhythmHandler.Instance.toggleDoubleTapCooldown = 10;
 					if (!hasLocked)
 					{
-						if (RhythmHandler.Instance.targeting)
+						if (RhythmHandler.Instance.autoAiming)
 						{
                             SoundEngine.PlaySound(new SoundStyle($"{typeof(RhythmInterface).GetNamespaceAsPath()}/Sounds/TargetEnable"));
 						}
@@ -119,8 +54,8 @@ namespace EpicosityPort.Systems.Rhythm
 						{
                             SoundEngine.PlaySound(new SoundStyle($"{typeof(RhythmInterface).GetNamespaceAsPath()}/Sounds/TargetDisable"));
                             RhythmHandler.Instance.lockedTargetIndex = -1;
-                            RhythmHandler.Instance.uiSound.Volume = Main.soundVolume;
-                            RhythmHandler.Instance.uiSound.Play();
+                            //RhythmHandler.Instance.uiSound.Volume = Main.soundVolume;
+                            //RhythmHandler.Instance.uiSound.Play();
 						}
 					}
 				}
@@ -128,6 +63,7 @@ namespace EpicosityPort.Systems.Rhythm
 			}
 
 			// Combo meter called outside update function of UI so it can drain in the background
+			// RS: I think there's better reasons why it shouldn't be in the UI update method
 			comboMeter -= comboDepletionRate;
 
 			if (comboMeter < 0)
