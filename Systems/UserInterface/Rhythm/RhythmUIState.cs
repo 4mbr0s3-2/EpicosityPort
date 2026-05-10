@@ -453,6 +453,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		}
 		public override void Update(GameTime gameTime)
 		{
+			if (Main.gamePaused) return;
 			// TODO RS: Move this to a better place lol
             sortedTargetableNPCs = Instance.UpdateTargetPosition();
             
@@ -491,25 +492,25 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		}
 		protected override void DrawSelf(SpriteBatch spriteBatch)
 		{
-			Terraria.GameInput.PlayerInput.SetZoom_MouseInWorld();
+            //Terraria.GameInput.PlayerInput.SetZoom_MouseInWorld();
 			#region Targeting code
 			if (Instance.IsAutoAiming)
 			{
 				// RS: YIKES
 				// I'm "fixing" this
+				// Should prob extract this too
 				//IEnumerable<NPC> sorted = Instance.UpdateTargetPosition();
+				Vector2 halfScreen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
 				for (int npcIndex = 0; npcIndex < sortedTargetableNPCs.Count(); npcIndex++)
 				{
 					NPC npc = sortedTargetableNPCs.ElementAt(npcIndex);
 					string text = npcIndex.ToString();
 					Vector2 origin = FontAssets.MouseText.Value.MeasureString(text) / 2f;
-					Vector2 halfScreen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
 					ChatManager.DrawColorCodedStringWithShadow(
 						spriteBatch,
 						FontAssets.MouseText.Value,
 						text,
-						//((npc.Center - Main.screenPosition) - halfScreen) * Main.GameViewMatrix.Zoom.X + halfScreen,
-						Vector2.Transform(npc.Center, Main.UIScaleMatrix),
+						((npc.Center - Main.screenPosition) - halfScreen) * Main.GameViewMatrix.Zoom.X + halfScreen,
 						Color.White,
 						0,
 						origin,

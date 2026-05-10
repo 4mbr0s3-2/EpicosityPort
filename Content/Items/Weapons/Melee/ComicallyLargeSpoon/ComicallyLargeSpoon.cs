@@ -31,7 +31,7 @@ namespace EpicosityPort.Content.Items.Weapons.Melee.ComicallyLargeSpoon
         }
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
         {
-            player.itemLocation = player.MountedCenter + new Vector2(-10 * player.direction, 20);
+            player.itemLocation = player.MountedCenter + new Vector2(-10 * player.direction, 20) * new Vector2(1, player.gravDir);
             player.itemRotation = 0;
         }
         public override void HoldItemFrame(Player player)

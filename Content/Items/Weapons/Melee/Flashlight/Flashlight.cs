@@ -55,7 +55,7 @@ namespace EpicosityPort.Content.Items.Weapons.Melee.Flashlight
                     player.ChangeDir(-1);
                 }
             }
-            player.itemLocation = player.MountedCenter + new Vector2(6 * player.direction, 4);
+            player.itemLocation = player.MountedCenter + new Vector2(6 * player.direction, 4) * new Vector2(1, player.gravDir); ;
             if (Main.myPlayer == player.whoAmI) // This client
             {
                 Vector2 playerToCursor = (Main.MouseWorld - player.Center);

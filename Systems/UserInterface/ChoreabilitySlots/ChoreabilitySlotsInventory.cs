@@ -83,6 +83,7 @@ namespace EpicosityPort.Systems.UserInterface.ChoreabilitySlots
                         {
                             Left = { Pixels = 50 + (TextureAssets.InventoryBack9.Value.Width + spaceBetweenSlots) * itemSlotIndex },
                             Top = { Pixels = 270 },
+
                             ValidItemFunc = (item) => { return item.ModItem is ChoreabilityBase || item.IsAir; }
                         }
                     );

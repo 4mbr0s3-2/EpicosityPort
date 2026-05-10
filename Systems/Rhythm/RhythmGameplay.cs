@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -790,7 +791,10 @@ public class RhythmHandler : ModSystem
         }
         else
         {
-            targetPosition = Main.MouseWorld;
+            PlayerInput.SetZoom_Unscaled();
+            //PlayerInput.SetZoom_MouseInWorld();
+            Vector2 mouseRelative = Main.MouseWorld;
+            targetPosition = mouseRelative;
             crosshairRotation = 0;
         }
         return sorted;

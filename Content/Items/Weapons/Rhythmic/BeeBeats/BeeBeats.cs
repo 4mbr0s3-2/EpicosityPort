@@ -30,7 +30,7 @@ namespace EpicosityPort.Content.Items.Weapons.Rhythmic.BeeBeats
 		}
 		public override void HoldStyle(Player player, Rectangle heldItemFrame)
 		{
-			player.itemLocation = player.MountedCenter + new Vector2(-6 * player.direction, 18);
+			player.itemLocation = player.MountedCenter + new Vector2(-6 * player.direction, 18) * new Vector2(1, player.gravDir);
 		}
 		public override RhythmHandler.GameplayType GetGameplayType() => RhythmHandler.GameplayType.Note;
 		public override RhythmHandler.GameplayNoteDisplayStyle GetGameplayNoteDisplayStyle => RhythmHandler.GameplayNoteDisplayStyle.FourKey;

@@ -116,7 +116,15 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 					{
 						Vector2 buttonOffset = new Vector2(50 * ease, 0);
 						buttonOffset = buttonOffset.RotatedBy((1f - ease) + (MathHelper.TwoPi / 4f) * buttonIndex);
-						Vector2 menuScreenPosition = Vector2.Transform(regionPickaxeUIPlayer.menuScreenPosition, Matrix.Invert(Main.UIScaleMatrix));
+                        // RS: Taking notes on matrices here
+                        // x - Main.screenPosition
+                        // PlayerInput.SetZoom_Unscaled()
+                        // PlayerInput.SetZoom_MouseInWorld()
+                        // Main.MouseScreen
+                        // Main.MouseWorld
+                        // Main.UIScaleMatrix
+                        // Main.GameViewMatrix.TransformationMatrix
+                        Vector2 menuScreenPosition = Vector2.Transform(regionPickaxeUIPlayer.menuScreenPosition, Main.GameViewMatrix.TransformationMatrix * Matrix.Invert(Main.UIScaleMatrix));
 						
                         Rectangle currentButtonRectangle = new Rectangle((int)(menuScreenPosition.X + buttonOffset.X), (int)(menuScreenPosition.Y + buttonOffset.Y), 40, 40);
 						Texture2D buttonTexture = null;
