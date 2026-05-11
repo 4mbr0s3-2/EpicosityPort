@@ -11,6 +11,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 using static EpicosityPort.Systems.Rhythm.RhythmHandler;
+using static System.Net.Mime.MediaTypeNames;
 namespace EpicosityPort.Systems.UserInterface.Rhythm
 {
 	public class RhythmUIState : UIState, IDisposable
@@ -102,10 +103,10 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			{
 				CullMode = CullMode.None
 			};
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-			Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
-			Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget2D);
-			Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+			spriteBatch.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            spriteBatch.GraphicsDevice.RasterizerState = rasterizerState;
+            spriteBatch.GraphicsDevice.SetRenderTarget(renderTarget2D);
+            spriteBatch.GraphicsDevice.Clear(Color.Transparent);
 			spriteBatch.Begin();
             //if (RhythmBeatmapHandler.inst?.TrackActive == true && RhythmBeatmapHandler.inst?.drawUiStateOverride != null)
             //{
@@ -124,9 +125,9 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			//	//Vector2 arrowLocation = displayLocation + new Vector2(ArrowXSpace, 0) * note.column;
 			//}
 			#endregion
-			EndDrawing:
+			//EndDrawing:
 			spriteBatch.End();
-			Main.graphics.GraphicsDevice.SetRenderTarget(null);
+            spriteBatch.GraphicsDevice.SetRenderTarget(null);
 			//return renderTarget2D;
 		}
 		public void RenderGuitarHero(SpriteBatch spriteBatch, RenderTarget2D renderTarget2D)
@@ -141,8 +142,8 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			{
 				CullMode = CullMode.None
 			};
-			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-			Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+            spriteBatch.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+            spriteBatch.GraphicsDevice.RasterizerState = rasterizerState;
 
 			if (accessories.fretboardType != "")
 			{
@@ -321,9 +322,9 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 					)
 				);
 			}
-			#endregion
-			Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget2D);
-			Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+            #endregion
+            spriteBatch.GraphicsDevice.SetRenderTarget(renderTarget2D);
+            spriteBatch.GraphicsDevice.Clear(Color.Transparent);
 			foreach (VertexPosTexQuad quad in quads)
 			{
 				VertexPositionTexture[] vertices = new VertexPositionTexture[4];
@@ -337,10 +338,10 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 				foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
 				{
 					pass.Apply();
-					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices, 0, 2);
+                    spriteBatch.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices, 0, 2);
 				}
 			}
-			Main.graphics.GraphicsDevice.SetRenderTarget(null);
+            spriteBatch.GraphicsDevice.SetRenderTarget(null);
 			//return renderTarget2D;
 		}
 		private void LoadAssets()
@@ -480,6 +481,7 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			}
 			else
 			{
+				// RS TODO: Fix for UI scaling
 				float centerOffset = 0;
 				PlayfieldLocation = Instance.targetPosition + ArrowRowOffset + new Vector2(0, 110);
 				PlayfieldLocation.X = Math.Max(PlayfieldLocation.X, Main.screenPosition.X + 40 - centerOffset);
@@ -510,7 +512,9 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 						spriteBatch,
 						FontAssets.MouseText.Value,
 						text,
-						((npc.Center - Main.screenPosition) - halfScreen) * Main.GameViewMatrix.Zoom.X + halfScreen,
+                        //((npc.Center - Main.screenPosition) - halfScreen) * Main.GameViewMatrix.Zoom.X + halfScreen,
+                        // Put into zoomed screen space, then, since our spriteBatch is on Main.UIScaleMatrix, take it into actual screen space
+                        Vector2.Transform((npc.Center - Main.screenPosition), Main.GameViewMatrix.TransformationMatrix * Matrix.Invert(Main.UIScaleMatrix)),
 						Color.White,
 						0,
 						origin,
@@ -519,9 +523,11 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			}
 			#endregion
 			spriteBatch.End();
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Main.GameViewMatrix.TransformationMatrix);
-			DrawBackground(spriteBatch);
-			if (gameplayType == GameplayType.Note)
+			// RS: RasterizerState needs to be CullNone so it doesn't cull when flipping gravity
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+            DrawBackground(spriteBatch);
+            if (gameplayType == GameplayType.Note)
 			{
 				DrawNoteGameplay(spriteBatch);
 			}
@@ -532,6 +538,19 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			DrawCrosshair(spriteBatch);
 			if (currentAcc != null) DrawAccuracyText(spriteBatch);
 			if (judgementCounter != null) DrawJudgementCounter(spriteBatch);
+
+			if (Main.GameViewMatrix.TransformationMatrix.M22 > 0) return;
+            string gravityPotionNote = EpicosityPort.Instance.GetLocalization($"Rhythmic.GravityPotionNote").Value;
+            ChatManager.DrawColorCodedStringWithShadow(
+                spriteBatch,
+                FontAssets.MouseText.Value,
+                gravityPotionNote,
+                //((npc.Center - Main.screenPosition) - halfScreen) * Main.GameViewMatrix.Zoom.X + halfScreen,
+                CalculatePlayfieldLocation() - Main.screenPosition + new Vector2(60, 50),
+                Color.White,
+                0,
+                FontAssets.MouseText.Value.MeasureString(gravityPotionNote) / 2f,
+                new Vector2(1, -1));
 		}
 		public void DrawBackground(SpriteBatch sb)
 		{
@@ -619,8 +638,6 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		}
 		public void DrawNote4KStyle(SpriteBatch spriteBatch)
 		{
-			spriteBatch.End();
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Main.GameViewMatrix.TransformationMatrix);
 			if (fKRenderTarget != null)
 			{
 				Vector2 ArrowRowLocation = CalculatePlayfieldLocation() + new Vector2(10, -235) - new Vector2(100, 100);
@@ -662,8 +679,6 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 					SpriteEffects.None,
 					0);
 			}
-			spriteBatch.End();
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 		//[Obsolete]
 		//public void DrawSwipeGameplay(SpriteBatch spriteBatch)
@@ -823,9 +838,12 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 		//}
 		public void DrawCrosshair(SpriteBatch sb)
 		{
-			Vector2 crosshairLocation = Instance.targetPosition - Main.screenPosition;
+			Vector2 crosshairDisplacement = Instance.targetPosition - Main.screenPosition;
+
+
+			//Main.NewText(crosshairDisplacement);
 			sb.Draw(CrosshairTexture,
-                new Rectangle((int)(crosshairLocation.X), (int)crosshairLocation.Y, 30, 30),
+                new Rectangle((int)(crosshairDisplacement.X), (int)crosshairDisplacement.Y, 30, 30),
                 new Rectangle(0, 0, 30, 30),
                 RhythmHandler.Instance.lockedTargetIndex > -1 ? Color.Red : Color.White,
                 Instance.crosshairRotation,

@@ -7,6 +7,7 @@ using System;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Achievements;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Default;
@@ -62,11 +63,11 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 				Main.LocalPlayer.cursorItemIconID = -1;
 			}
 			private Asset<Texture2D>[] shapeButtonTextures;
-            private Asset<Texture2D>[] bypassButtonTextures;
-            private Asset<Texture2D>[] filterButtonTextures;
-            private	Asset<Texture2D>[] inversionButtonTextures;
-            public override void OnInitialize()
-            {
+			private Asset<Texture2D>[] bypassButtonTextures;
+			private Asset<Texture2D>[] filterButtonTextures;
+			private	Asset<Texture2D>[] inversionButtonTextures;
+			public override void OnInitialize()
+			{
 				shapeButtonTextures = new Asset<Texture2D>[Enum.GetNames<PickaxeShape>().Length];
 				bypassButtonTextures = new Asset<Texture2D>[Enum.GetNames<PickaxeBypass>().Length];
 				filterButtonTextures = new Asset<Texture2D>[Enum.GetNames<PickaxeFilter>().Length];
@@ -76,19 +77,19 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 				{
 					shapeButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ShapeButton{i}");
 				}
-                for (int i = 1; i <= Enum.GetNames<PickaxeBypass>().Length; i++)
+				for (int i = 1; i <= Enum.GetNames<PickaxeBypass>().Length; i++)
 				{
-                    bypassButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/BypassButton{i}");
+					bypassButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/BypassButton{i}");
 				}
-                for (int i = 1; i <= Enum.GetNames<PickaxeFilter>().Length; i++)
-                {
+				for (int i = 1; i <= Enum.GetNames<PickaxeFilter>().Length; i++)
+				{
 					filterButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/FilterButton{i}");
-                }
-                for (int i = 1; i <= Enum.GetNames<PickaxeSelectionInversion>().Length; i++)
-                {
+				}
+				for (int i = 1; i <= Enum.GetNames<PickaxeSelectionInversion>().Length; i++)
+				{
 					inversionButtonTextures[i - 1] = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/InversionButton{i}");
-                }
-            }
+				}
+			}
 			protected override void DrawSelf(SpriteBatch spriteBatch)
 			{
 				isHovering = false;
@@ -98,6 +99,36 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 				{
 					return;
 				}
+
+				// RS: yeah ignore this
+				//            public enum ZoomContext
+				//{
+				//	Unscaled,
+				//	World,
+				//	Unscaled_MouseInWorld,
+				//	UI
+				//}
+				//if (Main.mouseRight && Main.mouseRightRelease)
+				//{
+				//var bugger = (string s) => EpicosityPort.Instance.Logger.Info(s);
+	 //           var bugger = (string s) => Main.NewText(s);
+	 //           bugger($"------------- NEW -------------");
+	 //               for (int i = 0; i < 4; i++)
+					//{
+					//	bugger($"--- {Enum.GetName(typeof(ZoomContext), (ZoomContext)i)} ---");
+					//	PlayerInput.SetDesiredZoomContext((ZoomContext)i);
+					//	PlayerInput.SetZoom_Context();
+
+	 //                   bugger($"ScreenPosition: {Main.screenPosition}");
+	 //                   bugger($"MouseScreen: {Main.MouseScreen}");
+					//	bugger($"MouseWorld: {Main.MouseWorld}");
+					//	bugger($"GameViewMatrix: {Main.GameViewMatrix.TransformationMatrix}");
+					//	bugger($"UIScaleMatrix: {Main.UIScaleMatrix}");
+	 //                   bugger($"ZoomMatrix: {Main.GameViewMatrix.ZoomMatrix}");
+	 //               }
+				//}
+				//Main.NewText($"{Main.MouseWorld}");
+
 				#region Draw and process region pickaxe buttons
 				if (regionPickaxeUIPlayer.guiAnimationProgress > 0)
 				{
@@ -116,17 +147,30 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 					{
 						Vector2 buttonOffset = new Vector2(50 * ease, 0);
 						buttonOffset = buttonOffset.RotatedBy((1f - ease) + (MathHelper.TwoPi / 4f) * buttonIndex);
-                        // RS: Taking notes on matrices here
-                        // x - Main.screenPosition
-                        // PlayerInput.SetZoom_Unscaled()
-                        // PlayerInput.SetZoom_MouseInWorld()
-                        // Main.MouseScreen
-                        // Main.MouseWorld
-                        // Main.UIScaleMatrix
-                        // Main.GameViewMatrix.TransformationMatrix
-                        Vector2 menuScreenPosition = Vector2.Transform(regionPickaxeUIPlayer.menuScreenPosition, Main.GameViewMatrix.TransformationMatrix * Matrix.Invert(Main.UIScaleMatrix));
+						// RS TODO: Taking notes on transform matrices here
+						// Main.MouseScreen
+						// - Unscaled: Absolute mouse position in screen space
+						// - World: Relative mouse position from top left of camera in game (world) space, accounting for zoom
+						// - Unscaled_MouseInWorld: Relative mouse position in game (world) space
+						// - UI: Absolute position in UI Scale space
+						// Main.MouseWorld
+						// - Unscaled: Absolute mouse position in world space, not accounting for zoom
+						// - World: Absolute mouse position in world space, accounting for zoom
+						// - Unscaled_MouseInWorld: Absolute mouse position in world space, accounting for zoom
+						// - UI: ??? screen position + mouse screen (UI scaled), likely not supposed to be used
+
+						// Coordinates should be interpreted as row vectors to be consistent with FNA doc (Vector2.Transform), so the variable is on the left in the algebra
+						// (and the matrix order is left to right, contrary to convention): [x y 0 1] * M_1...
+						// Main.UIScaleMatrix: Scale matrix that corresponds to UI scale such that x * UIScaleMatrix in scaled UI space = y in screen space
+						// - AKA x in scaled UI space = y * UIScaleMatrix^-1 in screen space
+						// - So the bottom right of the screen would be multiplied by 1/(UI scale) to get the bottom right in scaled UI space
+						// Main.GameViewMatrix.TransformationMatrix: Scale matrix that corresponds to zoom such that x * TransformationMatrix in game (world) space = y in screen space
+						// - Translation row corresponds to offset from Main.screenPosition in the top-left
+						// Main.GameViewMatrix.ZoomMatrix: Scale matrix almost identical to TransformationMatrix except without taking into account flipping the screen
+						// - Translation row corresponds to offset from Main.screenPosition in the top-left
+						Vector2 menuScreenPosition = Vector2.Transform(regionPickaxeUIPlayer.menuScreenPosition, Main.GameViewMatrix.TransformationMatrix * Matrix.Invert(Main.UIScaleMatrix));
 						
-                        Rectangle currentButtonRectangle = new Rectangle((int)(menuScreenPosition.X + buttonOffset.X), (int)(menuScreenPosition.Y + buttonOffset.Y), 40, 40);
+						Rectangle currentButtonRectangle = new Rectangle((int)(menuScreenPosition.X + buttonOffset.X), (int)(menuScreenPosition.Y + buttonOffset.Y), 40, 40);
 						Texture2D buttonTexture = null;
 						switch (buttonIndex)
 						{
@@ -490,60 +534,60 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 			}
 			else if (pickaxeFilter == PickaxeFilter.PinkTilesOnly)
 			{
-                // RS: tModLoader changed the way unloaded stuff works
+				// RS: tModLoader changed the way unloaded stuff works
 				// It WOULD be useful to use VanillaFallbackOnModDeletion as a feature but... this is a pickaxe
-                Tile t = Main.tile[x, y];
-                ModTile modTile = ModContent.GetModTile(t.TileType);
-                bool unloadedTile = modTile is UnloadedTile;
-                if (t.HasTile && unloadedTile)
-                {
-                    //ushort type = TileIO.Tiles.unloadedEntryLookup.Lookup(i, j);
-                    //var info = TileIO.Tiles.entries[type];
-                    //if (modName == null || info.modName.Equals(modName, StringComparison.OrdinalIgnoreCase))
-                    //{
-                    //    string key = $"{info.modName}/{info.name}";
-                    //    purgedTiles.TryGetValue(key, out var currentCount);
-                    //    purgedTiles[key] = currentCount + 1;
-                    //    if (actuallyPurge)
-                    //    {
-                    //        t.TileType = info.vanillaReplacementType;
-                    //    }
-                    
-                    if (pickaxeBypass == PickaxeBypass.Pickaxe)
-                    {
-                        if (pickaxePower >= 0) Main.LocalPlayer.PickTile(x, y, pickaxePower);
-                        else { WorldGen.SquareTileFrame(x, y); }
-                    }
-                    else if (pickaxeBypass == PickaxeBypass.WorldGen)
-                    {
-                        WorldGen.KillTile(x, y, false, false, false);
-                    }
-                    else if (pickaxeBypass == PickaxeBypass.BlackHole)
-                    {
-                        t.HasTile = false;
-                    }
-                }
-                var unloadedWallType = ModContent.WallType<UnloadedWall>();
+				Tile t = Main.tile[x, y];
+				ModTile modTile = ModContent.GetModTile(t.TileType);
+				bool unloadedTile = modTile is UnloadedTile;
+				if (t.HasTile && unloadedTile)
+				{
+					//ushort type = TileIO.Tiles.unloadedEntryLookup.Lookup(i, j);
+					//var info = TileIO.Tiles.entries[type];
+					//if (modName == null || info.modName.Equals(modName, StringComparison.OrdinalIgnoreCase))
+					//{
+					//    string key = $"{info.modName}/{info.name}";
+					//    purgedTiles.TryGetValue(key, out var currentCount);
+					//    purgedTiles[key] = currentCount + 1;
+					//    if (actuallyPurge)
+					//    {
+					//        t.TileType = info.vanillaReplacementType;
+					//    }
+					
+					if (pickaxeBypass == PickaxeBypass.Pickaxe)
+					{
+						if (pickaxePower >= 0) Main.LocalPlayer.PickTile(x, y, pickaxePower);
+						else { WorldGen.SquareTileFrame(x, y); }
+					}
+					else if (pickaxeBypass == PickaxeBypass.WorldGen)
+					{
+						WorldGen.KillTile(x, y, false, false, false);
+					}
+					else if (pickaxeBypass == PickaxeBypass.BlackHole)
+					{
+						t.HasTile = false;
+					}
+				}
+				var unloadedWallType = ModContent.WallType<UnloadedWall>();
 				if (t.WallType == unloadedWallType)
 				{
-                    if (pickaxeBypass == PickaxeBypass.Pickaxe || pickaxeBypass == PickaxeBypass.WorldGen)
-                    {
-                        WorldGen.KillWall(x, y);
-                    }
-                    else if (pickaxeBypass == PickaxeBypass.BlackHole)
-                    {
-                        Main.tile[x, y].WallType = WallID.None;
-                    }
-                }
-                //bool success = ModLoader.GetMod("ModLoader").TryFind<ModTile>("MysteryTile");
-                //if (!success) return;
+					if (pickaxeBypass == PickaxeBypass.Pickaxe || pickaxeBypass == PickaxeBypass.WorldGen)
+					{
+						WorldGen.KillWall(x, y);
+					}
+					else if (pickaxeBypass == PickaxeBypass.BlackHole)
+					{
+						Main.tile[x, y].WallType = WallID.None;
+					}
+				}
+				//bool success = ModLoader.GetMod("ModLoader").TryFind<ModTile>("MysteryTile");
+				//if (!success) return;
 
-                //            ushort num = (ushort)ModLoader.GetMod("ModLoader").Find<ModTile>("MysteryTile").Type;
-                //Tile tile = Framing.GetTileSafely(x, y);
-                //bool flag = tile.TileType != num || !tile.HasTile;
-                //if (!flag)
-                //{
-    //            	if (pickaxeBypass == PickaxeBypass.Pickaxe)
+				//            ushort num = (ushort)ModLoader.GetMod("ModLoader").Find<ModTile>("MysteryTile").Type;
+				//Tile tile = Framing.GetTileSafely(x, y);
+				//bool flag = tile.TileType != num || !tile.HasTile;
+				//if (!flag)
+				//{
+	//            	if (pickaxeBypass == PickaxeBypass.Pickaxe)
 				//{
 				//	if (pickaxePower >= 0) Main.LocalPlayer.PickTile(x, y, pickaxePower);
 				//	else { WorldGen.SquareTileFrame(x, y); }
@@ -567,7 +611,7 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 				}
 				else if (pickaxeBypass == PickaxeBypass.BlackHole)
 				{
-                    Main.tile[x, y].WallType = WallID.None;
+					Main.tile[x, y].WallType = WallID.None;
 				}
 			}
 			if (pickaxeFilter == PickaxeFilter.LiquidsOnly || pickaxeFilter == PickaxeFilter.Everything)

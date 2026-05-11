@@ -40,37 +40,41 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 
 		public void PreDrawCombo(SpriteBatch sb, string text)
 		{
-			Main.graphics.GraphicsDevice.SetRenderTarget(combo);
-			Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-
+			sb.GraphicsDevice.SetRenderTarget(combo);
+			sb.GraphicsDevice.Clear(Color.Transparent);
+				
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			ChatManager.DrawColorCodedString(sb, FontAssets.DeathText.Value, text, Vector2.Zero, Color.White, 0, Vector2.Zero, Vector2.One * 0.5f);
 			sb.End();
-			Main.graphics.GraphicsDevice.SetRenderTarget(null);
+			sb.GraphicsDevice.SetRenderTarget(null);
 		}
 
 		public void PreDrawShadow(SpriteBatch sb, string text, Color color)
 		{
-			Main.graphics.GraphicsDevice.SetRenderTarget(shadow);
-			Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+			sb.GraphicsDevice.SetRenderTarget(shadow);
+			sb.GraphicsDevice.Clear(Color.Transparent);
 			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			ChatManager.DrawColorCodedStringShadow(sb, FontAssets.DeathText.Value, text, Vector2.Zero, color * 0.7f, 0, Vector2.Zero, Vector2.One * 0.5f);
 			sb.End();
-			Main.graphics.GraphicsDevice.SetRenderTarget(null);
+			sb.GraphicsDevice.SetRenderTarget(null);
 		}
 		public void PreDraw(SpriteBatch sb, string text)
 		{
-			Main.graphics.GraphicsDevice.SetRenderTarget(this.text);
-			Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+			sb.GraphicsDevice.SetRenderTarget(this.text);
+            sb.GraphicsDevice.Clear(Color.Transparent);
 
-			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 			ChatManager.DrawColorCodedString(sb, FontAssets.DeathText.Value, text, Vector2.Zero, Color.White, 0, Vector2.Zero, Vector2.One * 0.5f);
 			sb.End();
-			Main.graphics.GraphicsDevice.SetRenderTarget(null);
+			sb.GraphicsDevice.SetRenderTarget(null);
 		}
 		public void Draw(SpriteBatch sb, Vector2 pos)
 		{
-			if (judgementText == "Epic")
+            sb.End();
+			// RS: Wow look at all this Ending and Beginning
+			// If only there were some stack implementation of SpriteBatch states
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            if (judgementText == "Epic")
 			{
 				var shader = GameShaders.Armor.GetShaderFromItemId(ItemID.LivingRainbowDye);
 				shader.Shader.Parameters["uSourceRect"].SetValue(new Vector4(0, 0, 200, 200));
@@ -79,11 +83,12 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			}
 			sb.Draw(shadow, pos, null, Color.White, 0, shadow.Size() / 2f, 1 + 0.2f * scaleAnim, SpriteEffects.None, 0);
 			sb.End();
-			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Main.GameViewMatrix.TransformationMatrix);
+			sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			sb.Draw(text, pos, null, Color.White, 0, text.Size() / 2f, 1 + 0.2f * scaleAnim, SpriteEffects.None, 0);
 			if (combo != null) sb.Draw(combo, pos + new Vector2(0, 40), null, Color.White, 0, combo.Size() / 2f, 1 + 0.2f * scaleAnim, SpriteEffects.None, 0);
 			sb.End();
-			sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Main.GameViewMatrix.TransformationMatrix);
+
+			sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 		public void Update(GameTime gt)
 		{

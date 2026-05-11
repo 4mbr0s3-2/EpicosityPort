@@ -2,6 +2,7 @@ Tiles.MemeiteOreTile.MapEntry: Memeite Ore Tile
 DeathMessages.RhythmMiss: "{0} did not feel the rhythm."
 
 Rhythmic: {
+	GravityPotionNote: No, this is not a bug.
 	ComboBarBonusTooltip:
 		'''
 		[c/FFFF00:Combo bar bonus:]

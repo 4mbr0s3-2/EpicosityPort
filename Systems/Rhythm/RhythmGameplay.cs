@@ -791,8 +791,7 @@ public class RhythmHandler : ModSystem
         }
         else
         {
-            PlayerInput.SetZoom_Unscaled();
-            //PlayerInput.SetZoom_MouseInWorld();
+            PlayerInput.SetZoom_World();
             Vector2 mouseRelative = Main.MouseWorld;
             targetPosition = mouseRelative;
             crosshairRotation = 0;
