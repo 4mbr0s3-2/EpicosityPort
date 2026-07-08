@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
@@ -481,13 +482,14 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm
 			}
 			else
 			{
-				// RS TODO: Fix for UI scaling
-				float centerOffset = 0;
+                PlayerInput.SetZoom_World();
+                float centerOffset = 0;
 				PlayfieldLocation = Instance.targetPosition + ArrowRowOffset + new Vector2(0, 110);
-				PlayfieldLocation.X = Math.Max(PlayfieldLocation.X, Main.screenPosition.X + 40 - centerOffset);
-				PlayfieldLocation.X = Math.Min(PlayfieldLocation.X, Main.screenPosition.X + (Main.screenWidth - 160));
-				PlayfieldLocation.Y = Math.Max(PlayfieldLocation.Y, Main.screenPosition.Y + 120);
-				PlayfieldLocation.Y = Math.Min(PlayfieldLocation.Y, Main.screenPosition.Y + (Main.screenHeight - 20));
+                float zoomxMarginAdjustment = (1 - (1 / Main.GameViewMatrix.Zoom.X)) / 2;
+                PlayfieldLocation.X = Math.Max(PlayfieldLocation.X, Main.screenPosition.X + 40 - centerOffset + zoomxMarginAdjustment * Main.screenWidth);
+                PlayfieldLocation.X = Math.Min(PlayfieldLocation.X, Main.screenPosition.X + (Main.screenWidth - 160) - zoomxMarginAdjustment * Main.screenWidth);
+				PlayfieldLocation.Y = Math.Max(PlayfieldLocation.Y, Main.screenPosition.Y + 120 + zoomxMarginAdjustment * Main.screenHeight);
+				PlayfieldLocation.Y = Math.Min(PlayfieldLocation.Y, Main.screenPosition.Y + (Main.screenHeight - 20) - zoomxMarginAdjustment * Main.screenHeight);
 				PlayfieldLocation.X += centerOffset;
 			}
 			return PlayfieldLocation;

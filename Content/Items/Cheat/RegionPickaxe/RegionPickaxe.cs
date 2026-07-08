@@ -147,7 +147,6 @@ namespace EpicosityPort.Content.Items.Cheat.RegionPickaxe
 					{
 						Vector2 buttonOffset = new Vector2(50 * ease, 0);
 						buttonOffset = buttonOffset.RotatedBy((1f - ease) + (MathHelper.TwoPi / 4f) * buttonIndex);
-						// RS TODO: Taking notes on transform matrices here
 						// Main.MouseScreen
 						// - Unscaled: Absolute mouse position in screen space
 						// - World: Relative mouse position from top left of camera in game (world) space, accounting for zoom

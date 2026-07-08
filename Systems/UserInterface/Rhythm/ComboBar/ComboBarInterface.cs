@@ -106,7 +106,6 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.ComboBar
 				#region Draw background of meter
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
-				// RS TODO: Check how the game handles shaders now+
 
 				MiscShaderData fCEffect = GameShaders.Misc[ShaderNames.ComboMeterFullComboEffect];
 				DrawData meterBackground = new DrawData
