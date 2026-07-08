@@ -78,8 +78,8 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 				// RS: Someone add this if they want to
 				//if (!RhythmBeatmapHandler.inst.TrackActive)
 				//{
-				//	positionInMeasure = (int)(inst.noteTimer - (60 / (float)dancePlayer.trackSpeed)) % (dancePlayer.noteRate * 4);
-				//	crotchet = dancePlayer.noteRate;
+				positionInMeasure = (int)(RhythmHandler.Instance.noteTimer - (60 / (float)dancePlayer.trackSpeed)) % (dancePlayer.noteRate * 4);
+				crotchet = dancePlayer.noteRate;
 				//}
 				//else
 				//{

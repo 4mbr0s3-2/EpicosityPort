@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+	<!-- RS: I made a separate save directory to prevent getting in the way of other mod stuff -->
+	<!-- You should probably comment this out -->
+	<PropertyGroup>
+		<ExtraBuildModFlags>-tmlsavedirectory "$([System.Environment]::GetFolderPath(System.Environment+SpecialFolder.MyDocuments))\My Games\Terraria\tModLoader-epicosity"</ExtraBuildModFlags>
+	</PropertyGroup>
 	<!-- Import tModLoader mod properties -->
 	<Import Project="..\tModLoader.targets" />
 

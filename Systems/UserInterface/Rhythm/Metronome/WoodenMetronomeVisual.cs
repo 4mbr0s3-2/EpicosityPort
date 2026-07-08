@@ -46,44 +46,46 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 			
 			// RS TODO: Make this pendulum NOT use a render target
 
-			float bpm = 60f / crotchet;
-			bpm /= 20f;
-			Main.instance.GraphicsDevice.SetRenderTarget(pendulum);
-			Main.instance.GraphicsDevice.Clear(Color.Transparent);
-			spriteBatch.Begin();
-			spriteBatch.Draw
-			(
-				woodenMetronome,
-				new Rectangle(2, 0, 6, 50),
-				new Rectangle(38, 0, 6, 50),
-				Color.White
-			);
-			spriteBatch.Draw
-			(
-				woodenMetronome,
-				new Rectangle(0, (int)(2 + bpm), 10, 10),
-				new Rectangle(44, 0, 10, 10),
-				Color.White
-			);
-			spriteBatch.End();
-			Main.instance.GraphicsDevice.SetRenderTarget(null);
-			Main.instance.GraphicsDevice.Clear(Color.Transparent);
+			//float bpm = 60f / crotchet;
+			//bpm /= 20f;
+			//Main.instance.GraphicsDevice.SetRenderTarget(pendulum);
+			//Main.instance.GraphicsDevice.Clear(Color.Transparent);
+			//spriteBatch.Begin();
+			//spriteBatch.Draw
+			//(
+			//	woodenMetronome,
+			//	new Rectangle(2, 0, 6, 50),
+			//	new Rectangle(38, 0, 6, 50),
+			//	Color.White
+			//);
+			//spriteBatch.Draw
+			//(
+			//	woodenMetronome,
+			//	new Rectangle(0, (int)(2 + bpm), 10, 10),
+			//	new Rectangle(44, 0, 10, 10),
+			//	Color.White
+			//);
+			//spriteBatch.End();
+			//Main.instance.GraphicsDevice.SetRenderTarget(null);
+			//Main.instance.GraphicsDevice.Clear(Color.Transparent);
 		}
 		public override void Draw(SpriteBatch spriteBatch, bool idle, float crotchet, float positionInMeasure)
 		{
-			//ChatManager.DrawColorCodedStringWithShadow(
-			//	spriteBatch,
-			//	Main.fontDeathText,
-			//	positionInMeasure.ToString(),
-			//	Vector2.Zero,
-			//	Color.White,
-			//	0,
-			//	Vector2.Zero,
-			//	Vector2.One
-			//);
-			double sine = System.Math.Cos(positionInMeasure / crotchet * MathHelper.Pi);
+            //ChatManager.DrawColorCodedStringWithShadow(
+            //	spriteBatch,
+            //	Main.fontDeathText,
+            //	positionInMeasure.ToString(),
+            //	Vector2.Zero,
+            //	Color.White,
+            //	0,
+            //	Vector2.Zero,
+            //	Vector2.One
+            //);
+            float bpm = 60f / crotchet;
+			bpm /= 20f;
+			double sine = Math.Cos(positionInMeasure / crotchet * MathHelper.Pi);
 			int margin = 30;
-			Vector2 topLeft = new Vector2(Main.screenWidth - 38 - margin, Main.screenHeight - 58 - margin);
+			Vector2 topLeft = new(Main.screenWidth - 38 - margin, Main.screenHeight - 58 - margin);
 			spriteBatch.Draw
 			(
 				woodenMetronome,
@@ -91,21 +93,43 @@ namespace EpicosityPort.Systems.UserInterface.Rhythm.Metronome
 				new Rectangle(0, 0, 38, 58),
 				Color.White
 			);
-			if (pendulum != null)
+            if (pendulum != null)
 			{
-				spriteBatch.Draw
+                spriteBatch.Draw
 				(
-					pendulum,
-					new Rectangle((int)topLeft.X + 21, (int)topLeft.Y + 50, 10, 50),
-					null,
+					woodenMetronome,
+					new Rectangle((int)topLeft.X + 16 + 3, (int)topLeft.Y + 50, 6, 50),
+					new Rectangle(38, 0, 6, 50),
 					Color.White,
 					(float)(sine * 0.8f),
-					new Vector2(5, 50),
-					SpriteEffects.None,
-					0
-				);
+                    new Vector2(3, 50),
+                    SpriteEffects.None,
+                    0
+                );
+				spriteBatch.Draw
+				(
+					woodenMetronome,
+					new Rectangle((int)topLeft.X + 14 + 5, (int)topLeft.Y + 50, 10, 10),
+					new Rectangle(44, 0, 10, 10),
+					Color.White,
+                    (float)(sine * 0.8f),
+                    new Vector2(5, 50 - (int)(2 + bpm)),
+                    SpriteEffects.None,
+                    0
+                );
+				//            spriteBatch.Draw
+				//(
+				//	pendulum,
+				//	new Rectangle((int)topLeft.X + 21, (int)topLeft.Y + 50, 10, 50),
+				//	null,
+				//	Color.White,
+				//	(float)(sine * 0.8f),
+				//	new Vector2(5, 50),
+				//	SpriteEffects.None,
+				//	0
+				//);
 			}
-			spriteBatch.Draw
+            spriteBatch.Draw
 			(
 				woodenMetronome,
 				new Rectangle((int)topLeft.X, (int)topLeft.Y + 38, 38, 20),
