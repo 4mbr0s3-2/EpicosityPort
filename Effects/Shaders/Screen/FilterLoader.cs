@@ -42,7 +42,7 @@ namespace EpicosityPort.Effects.Shaders.Screen
 			
 			
 			// Chocolate Rain			
-			//Filters.Scene[ShaderNames.ChocolateRainFilter] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.36862745098f, 0.09803921568f, 0.15294117647f).UseOpacity(0.33f), EffectPriority.Medium);
+			Filters.Scene[ShaderNames.ChocolateRainFilter] = new Filter(new ScreenShaderData("FilterMiniTower").UseColor(0.36862745098f, 0.09803921568f, 0.15294117647f).UseOpacity(0.33f), EffectPriority.Medium);
 
 			//// Shockwave effect by Kazzymodus https://forums.terraria.org/index.php?threads/tutorial-shockwave-effect-for-tmodloader.81685/
 			Asset<Effect> shockwave = EpicosityPort.Instance.Assets.Request<Effect>("Effects/Shaders/Screen/Shockwave");

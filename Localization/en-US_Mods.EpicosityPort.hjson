@@ -552,3 +552,5 @@ Buffs: {
 		Description: Mods.EpicosityPort.Buffs.KilleroombaBuff.Description
 	}
 }
+
+NPCs.ChocolateSlime.DisplayName: Chocolate Slime
