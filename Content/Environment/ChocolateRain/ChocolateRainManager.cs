@@ -1,4 +1,5 @@
-﻿using EpicosityPort.Systems.Network;
+﻿using EpicosityPort.Content.Items.Materials.ChocolateWaterBucket;
+using EpicosityPort.Systems.Network;
 using Humanizer;
 using Microsoft.Xna.Framework;
 using MonoMod.Cil;
@@ -20,7 +21,9 @@ namespace EpicosityPort.Content.Environment.ChocolateRain
             //On_Rain.Update += ChocolateRainRender.ChocolateRainUpdate;
             On_Main.StartRain += StartChocolateRain;
             On_Main.StopRain += StopChocolateRain;
+            On_Player.PutItemInInventoryFromItemUsage += On_Player_PutItemInInventoryFromItemUsage;
         }
+
         public override void OnModUnload()
         {
             On_Main.StartRain -= StartChocolateRain;
@@ -136,54 +139,64 @@ namespace EpicosityPort.Content.Environment.ChocolateRain
         }
 
         // RS TODO: Chocolate water bucket
-        public static void PickupChocolateWater(ILContext il)
+        //public static void PickupChocolateWater(ILContext il)
+        //{
+        //    var c = new ILCursor(il);
+        //    // Try to find where 566 is placed onto the stack
+        //    if (!c.TryGotoNext(i => i.MatchLdcI4(ItemID.WaterBucket)))
+        //    {
+        //        Instance.Mod.Logger.Info("Unable to patch!");
+        //        return; // Patch unable to be applied
+        //    }
+        //    c.Index++;
+        //    c.EmitDelegate<Func<int, int>>((originalValue) =>
+        //    {
+        //        if (Instance.IsRainingChocolate)
+        //            return ModContent.ItemType<ChocolateWaterBucket>();
+        //        return originalValue;
+        //    });
+        //}
+        private void On_Player_PutItemInInventoryFromItemUsage(On_Player.orig_PutItemInInventoryFromItemUsage orig, Player self, int type, int theSelectedItem)
         {
-            var c = new ILCursor(il);
-            // Try to find where 566 is placed onto the stack
-            if (!c.TryGotoNext(i => i.MatchLdcI4(206)))
-            {
-                Instance.Mod.Logger.Info("Unable to patch!");
-                return; // Patch unable to be applied
+            // RS: Player.ItemCheck_UseBuckets looks a bit messy,
+            // so just replace with a chocolate water bucket when we try getting a water bucket
+            if (type == ItemID.WaterBucket && self.CurrentSceneEffect.waterStyle.value == ModContent.GetInstance<ChocolateRainWaterStyle>().Slot) {
+                orig(self, ModContent.ItemType<ChocolateWaterBucket>(), theSelectedItem);
+                return;
             }
-            c.Index++;
-            c.EmitDelegate<Func<int, int>>((originalValue) =>
-            {
-                //if (IsRainingChocolate)
-                //    return ModContent.ItemType<ChocolateWaterBucket>();
-                return originalValue;
-            });
+            orig(self, type, theSelectedItem);
         }
 
-        public static void ChocolateRainForecast(ILContext il)
-        {
-            // RS TODO: Make this localization friendly lol
-            var c = new ILCursor(il);
-            // Try to find where 566 is placed onto the stack
-            if (!c.TryGotoNext(i => i.MatchLdstr("GameUI.HeavyRain")))
-            {
-                Instance.Mod.Logger.Info("Unable to patch!");
-                return; // Patch unable to be applied
-            }
-            c.Index += 3;
-            c.Emit(Ldloc, 19);
-            c.EmitDelegate<Func<string, string>>((originalText) =>
-            {
-                if (Instance.IsRainingChocolate)
-                {
-                    return originalText.Replace("Rain", "Chocolate Rain");
-                }
-                else
-                {
-                    return originalText;
-                }
-            });
-            c.Emit(Stloc, 19);
-            //c.EmitDelegate<Func<string, string>>((original) =>
-            //{
-            //    return "Chocolate Rain";
-            //});
-            //c.Emit(Mono.Cecil.Cil.OpCodes.Stloc_S, (byte)27);
-        }
+        //public static void ChocolateRainForecast(ILContext il)
+        //{
+        //    // RS TODO: Make this localization friendly lol
+        //    var c = new ILCursor(il);
+        //    // Try to find where 566 is placed onto the stack
+        //    if (!c.TryGotoNext(i => i.MatchLdstr("GameUI.HeavyRain")))
+        //    {
+        //        Instance.Mod.Logger.Info("Unable to patch!");
+        //        return; // Patch unable to be applied
+        //    }
+        //    c.Index += 3;
+        //    c.Emit(Ldloc, 19);
+        //    c.EmitDelegate<Func<string, string>>((originalText) =>
+        //    {
+        //        if (Instance.IsRainingChocolate)
+        //        {
+        //            return originalText.Replace("Rain", "Chocolate Rain");
+        //        }
+        //        else
+        //        {
+        //            return originalText;
+        //        }
+        //    });
+        //    c.Emit(Stloc, 19);
+        //    //c.EmitDelegate<Func<string, string>>((original) =>
+        //    //{
+        //    //    return "Chocolate Rain";
+        //    //});
+        //    //c.Emit(Mono.Cecil.Cil.OpCodes.Stloc_S, (byte)27);
+        //}
     }
  //   public class ChocolateRainModPlayer : ModPlayer
 	//{

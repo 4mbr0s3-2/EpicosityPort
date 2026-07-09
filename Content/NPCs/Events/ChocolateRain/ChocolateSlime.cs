@@ -9,7 +9,7 @@ namespace EpicosityPort.Content.NPCs.Events.ChocolateRain
     {
         public override void SetStaticDefaults()
         {
-            ChocolateRainSpawnPool.chocolateEnemyList.Add(NPC.type);
+            ChocolateRainSpawnPool.ChocolateEnemyList.Add(NPC.type);
             // DisplayName.SetDefault("Chocoslime");
         }
         public override void SetDefaults()

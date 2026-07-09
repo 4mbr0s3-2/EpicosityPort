@@ -1,11 +1,20 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EpicosityPort.Systems.Utilities;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria.ModLoader;
 
 namespace EpicosityPort.Content.Environment.ChocolateRain
 {
 	public class ChocolateRainWaterStyle : ModWaterStyle
 	{
-		public override int GetSplashDust()
+        private Asset<Texture2D> rainTexture;
+        public override void Load()
+        {
+            rainTexture = ModContent.Request<Texture2D>($"{GetType().GetNamespaceAsPath()}/ChocolateRain");
+        }
+        public override Asset<Texture2D> GetRainTexture() => rainTexture;
+        public override int GetSplashDust()
 			=> 7;
 
 		public override int GetDropletGore()
@@ -17,6 +26,7 @@ namespace EpicosityPort.Content.Environment.ChocolateRain
 			g = 1f;
 			b = 1f;
 		}
+		
 
 		public override Color BiomeHairColor()
 			=> new Color(64, 19, 13);
