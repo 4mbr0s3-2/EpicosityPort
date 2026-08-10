@@ -116,18 +116,12 @@ namespace EpicosityPort.Systems.UserInterface.VanillaOverrides
         //	"Mirsario is cool!",
         //};
 
-        //public static string[] calamityMusicSplashMessages = {
-        //	//"DOKUROOOOOOOOOOOOOO!",
-        //	"Now with GODLIKE TRACKS!",
-        //	"BANGER ALERT!",
-        //	//"\"Um, I really liked Timepiece Phase II...\"", // RS: I'm pretty sure this is a reference to KFAD2 MOJO
-        //	"Jared loves his hugs UwU",
-        //	"Fabsol is cool!",
-        //	"MountainDrew is cool!",
-        //	"Hectique is cool!",
-        //	"Now with Touhou's bells!",
-        //	//"Acidic chocolate!",
-        //};
+        // RS: As of 8/9/2026, I'm removing all code mentioning a popular Terraria mod
+        // That likely includes future ported code
+        // (future code in this repo ported from the 2021 tMod 1.3 code),
+        // but if it's stuff like exclusive NPC dialogue, 
+        // I'll likely just leave those to read
+        // If you wanted to see the old mod "compatibility" stuff here you can checkout a past commit
 
         public static void SetMainMenuSplashText()
         {
@@ -144,11 +138,6 @@ namespace EpicosityPort.Systems.UserInterface.VanillaOverrides
             //if (DateTime.Today.DayOfWeek == DayOfWeek.Friday)
             //{
             //	text = "Also play Friday Night Funkin!";
-            //}
-            // Mutually exclusive
-            //if (Epicosity.CalamityTupacMenu)
-            //{
-            //	text = "Something's off...";
             //}
             //else if (itsAllMemesText)
             if (itsAllMemesText)

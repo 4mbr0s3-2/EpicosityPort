@@ -133,30 +133,6 @@ namespace EpicosityPort.Systems.VanillaOverrides
         //    }
         //}
 
-        //public static void Main_UpdateAudio_CalamityEasterEgg(ILContext il)
-        //{
-        //	ILCursor iLCursor = new ILCursor(il);
-        //	// Go to where Main.curMusic = this.newMusic and replace this.newMusic with the new music
-        //	// Calamity Music code only overrides if the music is default when loaded
-        //	if (!iLCursor.TryGotoNext(MoveType.After, instruction => instruction.MatchLdfld<Main>("newMusic")))
-        //	{
-        //		Epicosity.inst.Logger.Info("Unable to override main menu music!");
-        //		return;
-        //	}
-        //	iLCursor.EmitDelegate<Func<int, int>>((newMusic) =>
-        //	{
-        //		int tupacTitleMusic = Epicosity.inst.GetSoundSlot(SoundType.Music, "Sounds/Music/TheTaleOfASuckaForLove");
-        //		if (newMusic == 6 && !Epicosity.loadedCompatibilityMods.HasFlag(Epicosity.CompatibilityMods.TerrariaOverhaul) && Main.gameMenu)
-        //		{
-        //			return tupacTitleMusic;
-        //		}
-        //		else
-        //		{
-        //			return newMusic;
-        //		}
-        //	});
-        //}
-
         public static void Main_OnTick()
         {
             if (Main.netMode != NetmodeID.Server)

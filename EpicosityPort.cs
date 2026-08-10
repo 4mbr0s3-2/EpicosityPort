@@ -11,18 +11,14 @@ namespace EpicosityPort
         //[Flags]
         //public enum CompatibilityMods
         //{
-        //    CalamityMod = 1,
         //    ThoriumMod = 2,
         //    TerrariaOverhaul = 4,
-        //    CalamityModMusic = 8,
         //    JoostMod = 16,
         //    Macrocosm = 32,
         //}
 
         //public static CompatibilityMods loadedCompatibilityMods = 0;
         //public int HasOneShotGame = 0;
-        //public static bool CalamityTupacMenu = false;
-
 
         //public static List<MethodInfo> LoadMethods;
         //public static List<MethodInfo> UnloadMethods;
@@ -66,15 +62,6 @@ namespace EpicosityPort
             //}
 
             IL_Main.DrawMenu += MainMenuOverride.HookMenuSplash;
-
-            //if (Main.netMode != NetmodeID.Server)
-            //{
-            //    if (ModLoader.GetMod("CalamityModMusic") != null && Main.rand.NextBool(10) && !loadedCompatibilityMods.HasFlag(CompatibilityMods.TerrariaOverhaul))
-            //    {
-            //        CalamityTupacMenu = true;
-            //        Terraria.IL_Main.UpdateAudio += ILHooks.Main_UpdateAudio_CalamityEasterEgg;
-            //    }
-            //}
             MainMenuOverride.SetMainMenuSplashText();
         }
         //public void UnloadReflection()

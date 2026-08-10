@@ -49,7 +49,7 @@ namespace EpicosityPort.Systems.Rhythm
                 case ChoreabilityType.Rage:
                     playerModifier = (player, comboMeter, strength) =>
                     {
-                        // TODO: Add Rogue from Calamity and Bard and Healer from Thorium
+                        // TODO: Add Bard and Healer from Thorium
                         //player.GetCritChance(DamageClass.Melee) += (int)(comboMeter * strength * 100);
                         //player.GetCritChance(DamageClass.Ranged) += (int)(comboMeter * strength * 100);
                         //player.GetCritChance(DamageClass.Magic) += (int)(comboMeter * strength * 100);
