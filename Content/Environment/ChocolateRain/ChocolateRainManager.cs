@@ -1,15 +1,11 @@
 ﻿using EpicosityPort.Content.Items.Materials.ChocolateWaterBucket;
 using EpicosityPort.Systems.Network;
-using Humanizer;
 using Microsoft.Xna.Framework;
-using MonoMod.Cil;
 using System;
 using Terraria;
 using Terraria.Chat;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using static Mono.Cecil.Cil.OpCodes;
 
 namespace EpicosityPort.Content.Environment.ChocolateRain
 {
@@ -92,24 +88,25 @@ namespace EpicosityPort.Content.Environment.ChocolateRain
             }
         }
 
-        internal static void StopChocolateRain(Terraria.On_Main.orig_StopRain orig)
+        internal void StopChocolateRain(On_Main.orig_StopRain orig)
         {
             if (Instance.RainingChocolate)
             {
                 Instance.RainingChocolate = false;
                 Main.AnglerQuestSwap();
-                if (Main.netMode == NetmodeID.SinglePlayer) Main.NewText("Chocolate has stopped raining.", new Color(138, 56, 41));
                 if (Main.netMode == NetmodeID.Server) // Server
                 {
                     //Sync with net
                     ModNetHandler.GetPacketHandler<ChocolateRainStatusPacketHandler>().SendTarget(-1, 0, Instance.RainingChocolate);
                     //Terraria.NetMessage.BroadcastChatMessage(NetworkText.FromLiteral("Chocolate has stopped raining."), new Color(138, 56, 41));
                 }
+                else
+                    Main.NewText(Mod.GetLocalization("Events.ChocolateRain.End"), new Color(138, 56, 41));
             }
             orig();
         }
 
-        internal static void StartChocolateRain(Terraria.On_Main.orig_StartRain orig)
+        internal void StartChocolateRain(On_Main.orig_StartRain orig)
         {
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
@@ -126,11 +123,11 @@ namespace EpicosityPort.Content.Environment.ChocolateRain
                     //    }
                     //}
                     // RS TODO: Localization
-                    if (Main.netMode == NetmodeID.SinglePlayer) Main.NewText("It's raining chocolate!", new Color(138, 56, 41));
+                    if (Main.netMode == NetmodeID.SinglePlayer) Main.NewText(Mod.GetLocalization("Events.ChocolateRain.Start"), new Color(138, 56, 41));
                     if (Main.netMode == NetmodeID.Server)
                     {
                         //Sync with net
-                        ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral("It's raining chocolate!"), new Color(138, 56, 41));
+                        ChatHelper.BroadcastChatMessage(Mod.GetLocalization("Events.ChocolateRain.Start").ToNetworkText(), new Color(138, 56, 41));
                         ModNetHandler.GetPacketHandler<ChocolateRainStatusPacketHandler>().SendTarget(-1, 256, Instance.RainingChocolate);
                     }
                 }

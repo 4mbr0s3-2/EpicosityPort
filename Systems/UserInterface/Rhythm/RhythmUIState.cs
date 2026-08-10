@@ -12,7 +12,6 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 using static EpicosityPort.Systems.Rhythm.RhythmHandler;
-using static System.Net.Mime.MediaTypeNames;
 namespace EpicosityPort.Systems.UserInterface.Rhythm
 {
 	public class RhythmUIState : UIState, IDisposable

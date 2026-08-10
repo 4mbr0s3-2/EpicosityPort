@@ -11,6 +11,41 @@ Rhythmic: {
 	DamageTooltip: "{0} rhythmic damage"
 }
 
+Events: {
+	ChocolateRain: {
+		Start: It's raining chocolate!
+		End: Chocolate has stopped raining.
+	}
+}
+
+Retrospective: {
+	PortStatusTooltip: {
+		TooltipPrefix: "Port Status: "
+		Status: {
+			New: {
+				Name: New
+				Desc: This item is a new addition to the port and has not existed in the original Terraria 1.3.5.3 mod.
+			}
+			Improved: {
+				Name: Improved
+				Desc: This item has been improved while porting it from the original Terraria 1.3.5.3 mod.
+			}
+			Identical: {
+				Name: Identical
+				Desc: This item is (or should be) identical to the original Terraria 1.3.5.3 mod.
+			}
+			Degraded: {
+				Name: Degraded
+				Desc: This item has degraded functionality in porting it from the original Terraria 1.3.5.3 mod.
+			}
+			Broken: {
+				Name: Broken
+				Desc: This item is completely broken or different from the original Terraria 1.3.5.3 mod.
+			}
+		}
+	}
+}
+
 Items: {
 	MemeiteBar: {
 		DisplayName: Memeite Bar

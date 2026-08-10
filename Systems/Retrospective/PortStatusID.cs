@@ -1,11 +1,11 @@
 ﻿namespace EpicosityPort.Systems.Retrospective
 {
-    internal enum PortStatus
+    public enum PortStatusID
     {
         New,
         Improved,
         Identical,
         Degraded,
-        Broken
+        Broken,
     }
 }
